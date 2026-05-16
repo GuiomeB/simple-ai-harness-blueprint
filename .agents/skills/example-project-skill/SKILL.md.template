@@ -1,0 +1,54 @@
+<!--
+  TEMPLATE FILE — RENAME `SKILL.md.template` TO `SKILL.md` BEFORE USE.
+
+  The `.template` suffix is intentional: it keeps Claude.ai / Cowork skill
+  validators from counting this file as a second SKILL.md when the parent
+  blueprint is packaged as a zip. Once you copy the L template into your own
+  project, rename this file to `SKILL.md` so Claude actually loads the skill.
+-->
+
+---
+name: example-project-skill
+description: Template placeholder for a project-specific Claude skill. Rename the folder, replace this description with real triggers, and edit the body before publishing or relying on this skill. Not intended to be invoked as-is.
+---
+
+# Example Project Skill
+
+> This is a **template** for a project-specific Claude skill. After copying it into your project: (1) rename `SKILL.md.template` to `SKILL.md`, (2) rename the folder (`example-project-skill/` → your skill's kebab-case name), (3) replace the frontmatter description with real trigger language, (4) replace this body with the skill's actual instructions.
+
+## When to use
+
+- <Trigger condition 1>
+- <Trigger condition 2>
+
+## When NOT to use
+
+<Single line — what this skill is not for.>
+
+## Doctrine
+
+The 4 Karpathy rules (`AGENTS.md §Doctrine`) apply. Project-specific rules:
+
+- <Project rule 1>
+- <Project rule 2>
+
+## Workflow
+
+1. <Step 1 — what to check / load before acting>
+2. <Step 2 — the core action>
+3. <Step 3 — validation>
+4. <Step 4 — output format>
+
+## Reference
+
+- Pivot files: `<path/to/file.ts>`, `<path/to/file.ts>`
+- Capsules to load: `.agents/context/<domain>.md`
+- Patterns to apply: `.agents/patterns/<pattern>.md` (if any)
+
+## Output format
+
+<Describe what the skill produces — a code block, a file, a checklist, a report.>
+
+## Boundaries
+
+<Single paragraph — what this skill does NOT do.>

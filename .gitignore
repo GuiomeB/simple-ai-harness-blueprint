@@ -1,0 +1,24 @@
+# Local, non-shared notes — see _local/CI_RULEBOOK.md for what lives here.
+# Leading `/` anchors to repo root only — without it, references/templates/L/_local/
+# (which IS shipped as part of the template) would be accidentally ignored.
+/_local/
+
+# Python — for the meta-validator scripts under scripts/
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Build / dist artefacts (filled in once tooling lands)
+node_modules/
+dist/
+build/

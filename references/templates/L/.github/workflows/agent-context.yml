@@ -1,0 +1,46 @@
+name: Agent Context
+
+# Non-blocking signal: runs the meta-validator on any change to the harness
+# files. Reports warnings/errors but does NOT fail the required-CI aggregator.
+# Intended as ambient drift detection.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'WORKFLOW.md'
+      - 'STATUS_APP.md'
+      - '.agents/**'
+      - 'scripts/validate_agent_context.py'
+      - '.github/workflows/agent-context.yml'
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'WORKFLOW.md'
+      - 'STATUS_APP.md'
+      - '.agents/**'
+      - 'scripts/validate_agent_context.py'
+      - '.github/workflows/agent-context.yml'
+
+jobs:
+  validate-agent-context:
+    name: Validate agent context (non-blocking)
+    runs-on: ubuntu-latest
+    # Non-blocking: errors are reported but the job's status does not fail
+    # the required-CI aggregator. Promote to blocking only after a stable
+    # period (no false positives for at least one cycle).
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run validator
+        run: python scripts/validate_agent_context.py

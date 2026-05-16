@@ -1,0 +1,7 @@
+interface:
+  display_name: "Simple AI Harness"
+  short_description: "Install AI collaboration rails"
+  default_prompt: "Use $simple-ai-harness-blueprint to audit this repo and recommend the right S/M/L harness."
+
+policy:
+  allow_implicit_invocation: true

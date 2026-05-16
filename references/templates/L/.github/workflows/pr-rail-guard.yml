@@ -1,0 +1,33 @@
+name: PR Rail Guard
+
+# Blocking gate: fails any PR declared `Rail: green` that touches a path under
+# .github/CODEOWNERS, or any PR with no `Rail:` declaration at all.
+# This is the machine-enforcement layer of the risk-rail discipline.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+jobs:
+  rail-guard:
+    name: Check PR rail consistency
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history is needed so `git diff` between base and head works.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check rail consistency
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python scripts/check_pr_rail_consistency.py
