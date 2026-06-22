@@ -54,6 +54,14 @@ The key property: **filenames never change between sizes**. Promoting from S to 
 
 A note on signals: S/M/L is *not* a function of codebase size. A 2 kLoC side-project with three different AI agents in regular use needs M. A 50 kLoC monolith with one occasional contributor can live at S. The signal that matters is *recurring agent confusion*, not lines of code.
 
+### L → L+ — a profile, not a rung
+
+For a long time the doctrine was flat: "L is the end of the additive ladder; no size after L." That line was load-bearing — it's the guard against the maximalist sprawl this blueprint exists to fight. When the 2026 wave of agent practice (loop engineering, hooks, subagents, headless CI) made *autonomous execution* unavoidable, the temptation was to bolt on a "sixth size". That would have been a mistake: most repos never run unattended loops, and a recommended fourth rung would have pushed machinery onto projects that don't need it.
+
+So L+ is deliberately **not** a fourth size. It's an **opt-in profile** layered on an L harness — the same L, plus the wiring to run bounded loops unattended (`/loop`, `.claude/` hooks, a headless runner). The distinction is enforced three ways: the size matrix never recommends L+, promotion requires *all five* autonomy signals to be true, and the decision must be recorded in an ADR (`ADR-0002`). The unattended clause of rule 1 ("pick the most reasonable interpretation, record the assumption") fires *only* inside an activated loop; everywhere else the default stays conservative. And a loop without its three hard brakes (budget · no-progress detection · kill-switch) is simply forbidden — autonomy without brakes is a regression, not a feature.
+
+This is the one place the blueprint reverses an earlier absolute. We did it on purpose, in scope, and wrote the ADR to say so.
+
 ---
 
 ## The three mechanisms — what was tried, what stuck
@@ -127,7 +135,8 @@ A mature repo with a working memory should be *enhanced*. Re-scaffolding rarely 
 This is v1. Known gaps:
 
 - **No machine-readable evaluation harness.** I'd like to ship a small test suite that, given a target repo and an expected level, asserts the blueprint has been applied correctly. Not yet here.
-- **The IDE-side init hook is still prose-only.** When IDEs expose session-start hooks, the load order should wire there.
+- **The init hook is now real at L+, prose-only below.** L+ ships actual `.claude/` hooks (post-tool formatter, push-to-main defer, denied log) and a `/loop` workflow with hard brakes — the autonomous-execution axis the early versions lacked. Below L+, the load order is still prose the agent re-reads, not a wired session-start hook.
+- **The L+ headless runner is deliberately under-powered.** It ships at manual-dispatch only. Real scheduled, self-triggering loops are possible but were left off by default to keep the blast radius small — autonomy is earned, not the default.
 - **The validator is intentionally minimal.** It catches the obvious failures (broken links, orphan patterns, missing capsules), not deep semantic drift. A deeper validator is possible but starts to compete with general code review.
 - **No per-language guidance.** Patterns are generic. Whether to ship a `templates/python/` or `templates/typescript/` subfolder with language-specific examples is an open question.
 

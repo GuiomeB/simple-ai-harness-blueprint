@@ -144,7 +144,7 @@ Deterministic helpers that make L safe to run with fewer babysitters. The *conce
 
 ## Maintenance and evolution
 
-L is the end of the additive ladder. The system maintains itself via:
+L is the end of the **general** additive ladder; the only thing on top is the opt-in **L+** autonomy profile (`references/templates/L+/`, ADR-gated — not a sixth size). The system maintains itself via:
 
 - `/retro` after every release
 - `/learn` after every meaningful friction or incident

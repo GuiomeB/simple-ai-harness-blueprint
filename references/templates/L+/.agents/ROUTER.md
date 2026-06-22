@@ -14,7 +14,7 @@ Load the **minimum** context useful for the task at hand. Doesn't replace `AGENT
 
 ## Routing table
 
-> The first row below is a **worked example** wired to `data-mutations.md` + `change-critical-zone.md`. This repo has no application code yet, so the row is kept as pedagogical reference for downstream users — replace or delete it once a real domain emerges in this project.
+> The first row below is a **worked example** wired to `data-mutations.md` + `change-critical-zone.md`. Replace or delete it if it doesn't match your domains.
 
 | Task family | Pivot capsule | Complements (capsule / pattern / rule) | Skill / workflow |
 |---|---|---|---|
@@ -29,8 +29,7 @@ Load the **minimum** context useful for the task at hand. Doesn't replace `AGENT
 | Retro, friction, refactor learning | (no capsule) | `STATUS_APP.md` if scope is project-wide | `/retro` (release) or `/learn <scope>` |
 | Update the agent system itself (this file, capsules, patterns, `AGENTS.md`) | this file | `WORKFLOW.md`, `patterns/INDEX.md`, run `validate_agent_context.py` after | none |
 | Edit an execution primitive (`.claude/agents/**`, glob-scoped rules, and at L+ hooks/settings) | (no capsule) | `AGENTS.md §Execution primitives`, run `validate_agent_context.py` after | `harness-reviewer` subagent |
-| Run an activated autonomous loop (L+ only, ADR-gated) | (no capsule) | `AGENTS.md §Autonomy profile`, `.agents/workflows/loop.md`, `docs/adr/ADR-0002-*` | `/loop` workflow |
-| Edit a template file shipped to downstream users (`.agents/**`, `docs/adr/**`, `_local/**`) | (no capsule) | `patterns/change-critical-zone.md` (templates ARE the product here) | none |
+| Run an activated autonomous loop (L+ only, ADR-gated) | (no capsule) | `AGENTS.md §Autonomy profile`, `.agents/workflows/loop.md` | `/loop` workflow |
 
 Add one row per stable critical domain. Don't pre-create rows for files that don't exist yet.
 

@@ -67,6 +67,12 @@ For any decision that:
 
 write an ADR under `docs/adr/ADR-<NNNN>-<slug>.md`. See `docs/adr/README.md` for the format.
 
-## 8. Beyond L
+## 8. Beyond L — the L+ autonomy profile
 
-The harness has no further size. Evolution = more patterns, more rules, more project-specific skills under `.agents/skills/`, more ADRs. Not new top-level files. If something doesn't fit, it's a runbook entry or an ADR — not a new blueprint artefact.
+L is the end of the **general** additive ladder. There is no sixth size. The only thing on top of L is **L+**, a specialised **opt-in autonomy profile** (recorded in `docs/adr/ADR-0002-lplus-autonomous-execution-profile.md`) — the same L harness plus the wiring to run bounded loops unattended (`/loop`, `.claude/` hooks, the headless runner). L+ is:
+
+- **gated by an ADR** and the five promotion criteria in `AGENTS.md §Autonomy profile`,
+- **never the default** — the default posture stays clarify / small diff / local validation,
+- **bounded** — a loop without its three hard brakes (budget · no-progress detection · kill-switch) is forbidden.
+
+This repo dogfoods L+ (real `.claude/` hooks + `/loop`), with the headless runner left at manual dispatch. Everything else is still horizontal: more patterns, more rules, more project-specific skills, more ADRs. Not new top-level sizes. If something doesn't fit, it's a runbook entry or an ADR — not a new blueprint artefact.

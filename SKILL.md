@@ -1,11 +1,11 @@
 ---
 name: simple-ai-harness-blueprint
-description: Install, audit, or extend an AI-collaboration blueprint on a code repository — the AGENTS.md / CLAUDE.md / .agents/ structure that lets AI agents (Cursor, Claude Code, Codex Desktop/CLI, Windsurf) collaborate without drift. Three additive sizes (S/M/L). Trigger when bootstrapping a new repo's AI scaffold, promoting an existing harness to the next size, or auditing one for sprawl.
+description: Install, audit, or extend an AI-collaboration blueprint on a code repository — the AGENTS.md / CLAUDE.md / .agents/ structure that lets AI agents (Cursor, Claude Code, Codex Desktop/CLI, Windsurf) collaborate without drift. Three additive sizes (S/M/L) plus an opt-in L+ autonomy profile. Trigger when bootstrapping a new repo's AI scaffold, promoting an existing harness to the next size, or auditing one for sprawl.
 ---
 
 # Simple AI Harness Blueprint
 
-A scaffold for repos where AI agents and humans collaborate. Three sizes (S/M/L), strictly additive — filenames never change between levels.
+A scaffold for repos where AI agents and humans collaborate. Three sizes (S/M/L), strictly additive — filenames never change between levels — plus an opt-in **L+** autonomy profile (ADR-gated; not a fourth size).
 
 ## When NOT to use
 
@@ -40,6 +40,18 @@ Depths of harness, not codebase sizes. Match signals:
 Two or more signals at a level → adopt that level. Never jump straight to L on a fresh repo.
 
 **Note on the `AGENTS.md` signal:** a freshly-generated S `AGENTS.md` is itself ~100–150 lines (5 Karpathy rules + M0 + critical zones + commands + rail rule + load order). When reading this signal, look at *project-specific accretion on top of the baseline*, not the raw line count.
+
+### L+ — the autonomy profile (opt-in, not a fourth size)
+
+L+ is **not** the next rung on this matrix. It is a specialised profile layered on an L harness: the same L, plus the wiring to run bounded loops unattended. The size matrix never recommends it — promote only when **all five** are true, and record the decision in an ADR:
+
+- repeated loops with a verifiable goal,
+- real unattended execution (headless / scheduled),
+- parallel subagents or worktrees in use,
+- a CI / headless runner exists,
+- budgets and stop-conditions are genuinely needed.
+
+None of these → stay at L. Adding L+ to a repo that doesn't need it re-creates the sprawl this blueprint fights. A loop without its three hard brakes (budget · no-progress detection · kill-switch) is forbidden.
 
 ## Tree per size
 
@@ -101,6 +113,25 @@ your-repo/
 │       └── pr-rail-guard.yml             blocking gate on PR risk rail consistency
 + _local/CI_RULEBOOK.md                   optional, gitignored: rationale of CI/agent choices
 ```
+
+### L+ (additive over L) — the opt-in autonomy profile (ADR-gated, not a size)
+
+```
++ .agents/
+│   └── workflows/
+│       └── loop.md                        /loop unit-of-work: 3 hard brakes + reviewer verification
++ .claude/
+│   ├── settings.json                      hooks: post-tool formatter, push-to-main defer, denied log
+│   └── hooks/
+│       └── gate_git_push.sh               defers `git push … main` for human approval (fail-open)
++ .github/
+│   └── workflows/
+│       └── headless-loop.yml              headless runner — manual-dispatch until brakes are exercised
++ docs/adr/
+    └── ADR-0002-*.md                      records the decision to run autonomously (mandatory)
+```
+
+Promotion to L+ is gated (see §Pick the size → L+). `.claude/logs/` is gitignored. A loop without its three hard brakes is forbidden.
 
 ## File size budgets
 

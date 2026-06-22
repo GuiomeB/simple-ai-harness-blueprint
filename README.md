@@ -2,7 +2,7 @@
 
 A reusable scaffold for repositories where AI agents (Cursor, Claude Code, Windsurf, Codex CLI, Antigravity) and humans collaborate — without drift, amnesia, or contradictory rules accreting in every config file.
 
-Three sizes — **S**, **M**, **L** — each strictly additive over the previous. Start at the smallest size that fits your project. Grow by *adding* files, never by *renaming* them.
+Three sizes — **S**, **M**, **L** — each strictly additive over the previous, plus an opt-in **L+** autonomy profile on top of L (not a fourth size). Start at the smallest size that fits your project. Grow by *adding* files, never by *renaming* them.
 
 ---
 
@@ -66,14 +66,16 @@ simple-ai-harness-blueprint/
     │   │                               including a /learn workflow from day one)
     │   ├── M/                         (additive: STATUS_APP, ROUTER, context capsules, retro workflow,
     │   │                               formalized PR template)
-    │   └── L/                         (additive: patterns, rules, project skills, ADRs, meta-validator,
-    │                                    CI signal, CODEOWNERS)
+    │   ├── L/                         (additive: patterns, rules, project skills, ADRs, meta-validator,
+    │   │                               CI signal, CODEOWNERS, reviewer subagent)
+    │   └── L+/                        (opt-in autonomy profile: /loop, .claude/ hooks, headless runner,
+    │                                    ADR-0002 — not a fourth size)
     └── health-metrics.md              (diagnostic checklist for an existing harness)
 ```
 
 `Explanations.md` is not part of the skill — it's pedagogical material for someone reading this repo on GitHub. The skill itself never loads it.
 
-This repository also dogfoods its own blueprint: it carries an L-level harness for its own development (`AGENTS.md`, `.agents/`, `scripts/validate_agent_context.py`, etc.).
+This repository also dogfoods its own blueprint: it runs the **L+** profile for its own development (`AGENTS.md`, `.agents/`, `.claude/` hooks + `/loop`, `scripts/validate_agent_context.py`, etc.), with the headless runner kept at manual dispatch.
 
 ---
 
@@ -83,9 +85,11 @@ This repository also dogfoods its own blueprint: it carries an L-level harness f
 
 **M** — public/production codebase, 1–3 AI agents, recurring "the agent forgot rule X". Adds routing, status log, and formal PR risk rails. The 80% sweet spot.
 
-**L** — established project, multiple rotating agents, painful past frictions, real release discipline. Adds patterns, project-specific skills, ADRs, meta-validator, CI signals.
+**L** — established project, multiple rotating agents, painful past frictions, real release discipline. Adds patterns, project-specific skills, ADRs, meta-validator, CI signals, a read-only reviewer subagent.
 
-The full signal matrix is in [`SKILL.md`](./SKILL.md). Match signals — not codebase lines — to a level.
+**L+** — *not a fourth size; an opt-in autonomy profile on top of L.* Add it only when you actually run bounded loops unattended (headless CI, parallel subagents/worktrees, real budgets and stop-conditions) — and record the decision in an ADR. It adds `/loop` (with three mandatory hard brakes), `.claude/` hooks, and a headless runner. A loop without its brakes is forbidden; the default stays conservative.
+
+The intro line (top of this file), the full signal matrix, and the L+ gate are in [`SKILL.md`](./SKILL.md). Match signals — not codebase lines — to a level.
 
 ---
 

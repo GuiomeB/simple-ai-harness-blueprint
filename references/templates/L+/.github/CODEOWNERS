@@ -1,0 +1,39 @@
+# CODEOWNERS — source of truth for critical paths and review ownership
+#
+# This file feeds two systems:
+#   1. GitHub's "Require review from Code Owners" branch protection rule.
+#   2. The risk-rail CI gate (`pr-rail-guard` or equivalent): any PR declared
+#      `green` that touches a path listed here fails the gate. See
+#      `WORKFLOW.md §5 — Risk rail enforcement at L`.
+#
+# Conventions:
+#   - One critical zone per line. Wildcards welcome.
+#   - The owner can be a GitHub username, a team, or a placeholder for solo
+#     repos (e.g. `@yourhandle`).
+#   - Keep this list aligned with `AGENTS.md §Critical zones`.
+#   - When you remove a path here, write an ADR explaining why (you're
+#     lowering the bar for an entire zone — that's a decision).
+
+# Universal critical paths (almost always):
+package.json                                    @<owner>
+package-lock.json                               @<owner>
+.github/CODEOWNERS                              @<owner>
+.github/workflows/                              @<owner>
+
+# Agent harness (changes affect every agent's behaviour):
+AGENTS.md                                       @<owner>
+CLAUDE.md                                       @<owner>
+WORKFLOW.md                                     @<owner>
+.agents/                                        @<owner>
+.claude/                                         @<owner>     # Claude Code runtime: subagents, and at L+ hooks/settings
+scripts/                                        @<owner>
+
+# Project-specific critical zones — REPLACE these with your real paths:
+# Examples:
+# src/engine/                                   @<owner>
+# src/auth/                                     @<owner>
+# src/db/migrations/                            @<owner>
+# worker/src/                                   @<owner>
+
+# Documentation (lighter ownership, but agent-readable docs touch many systems):
+docs/adr/                                       @<owner>

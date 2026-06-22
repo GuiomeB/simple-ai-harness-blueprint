@@ -1,8 +1,8 @@
-# simple-ai-harness-blueprint — Agent Contract
+# <Project Name> — Agent Contract
 
 ## Doctrine — the 5 Karpathy rules
 
-Before any action on this repo, **every agent** (Claude Code, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise. They are *posture*; the verification mechanism is **M0** (below).
+Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise. They are *posture*; the verification mechanism is **M0** (below).
 
 1. **Ask, don't assume.**
    If anything is unclear — intent, architecture, requirements — ask before writing a single line. Never make silent assumptions. *Only* when running unattended in an explicitly activated autonomous mode (L+), pick the most reasonable interpretation, proceed, and **record the assumption** rather than blocking.
@@ -33,7 +33,7 @@ The validation matrix, the Definition of Done (`WORKFLOW.md`), `/tdd-loop`, and 
 
 ## Role of this file
 
-- `AGENTS.md` is the canonical contract for all agents. Codex CLI reads it natively; Claude Code reads it via `CLAUDE.md` adapter.
+- `AGENTS.md` is the canonical contract for all agents.
 - Domain-specific doctrine lives in `.agents/context/*.md` capsules — load only what the ROUTER points to.
 - `.agents/patterns/*.md` carries short, copyable procedures keyed to pivot files in the codebase.
 - `.agents/rules/*.md` carries narrow technical conventions (test signatures, smoke script contracts, etc.).
@@ -54,33 +54,29 @@ Never load large documents "just in case". Never load more than 3 capsules + pat
 
 ## Project
 
-Open-source template repo (`simple-ai-harness-blueprint`) providing a copyable AI-collaboration scaffold — `AGENTS.md` + `CLAUDE.md` + `.agents/` + meta-validator + risk-rail CI — for projects where AI agents and humans collaborate via strict PR workflow on GitHub. Bootstrap stage: no application code yet; current artefacts are documentation, templates, and CI scaffolding. Active agents: Claude Code (primary), Codex CLI (occasional).
+<2–4 lines an agent cannot deduce from the code: domain, deployment target, stage, any unusual architectural choice.>
 
 ## Essential commands
 
 ```bash
-<run dev>                 # local dev server (n/a at bootstrap stage)
-<typecheck>               # type checker (n/a at bootstrap stage)
-<lint>                    # linter (n/a at bootstrap stage)
-<test>                    # unit tests (n/a at bootstrap stage)
-<format>                  # formatter — run before every commit (n/a at bootstrap stage)
-<build>                   # production build (n/a at bootstrap stage)
-<smoke>                   # smoke / integration check (n/a at bootstrap stage)
+<run dev>                 # local dev server
+<typecheck>               # type checker
+<lint>                    # linter
+<test>                    # unit tests
+<format>                  # formatter — run before every commit
+<build>                   # production build
+<smoke>                   # smoke / integration check
 python scripts/validate_agent_context.py    # meta-validator (this harness)
 ```
 
-Replace each `<placeholder>` once the corresponding tool is wired in. Until then, only the validator is operational.
-
 ## Critical zones
 
-Files where mistakes are expensive. At bootstrap stage the only critical zones are the harness itself: every contract / template change affects every downstream user of the blueprint.
+Files where mistakes are expensive. Each zone has a capsule and (when the procedure recurs) a pattern.
 
 | File or zone | Capsule | Pattern | Project skill |
 |---|---|---|---|
-| `AGENTS.md`, `.agents/**`, `WORKFLOW.md` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
-| `scripts/validate_agent_context.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
-| `.github/workflows/pr-rail-guard.yml`, `scripts/check_pr_rail_consistency.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
-| `<path/to/future-critical-file>` | `.agents/context/<domain>.md` | `.agents/patterns/change-critical-zone.md` | `<project-skill>` if any |
+| `<path/to/critical-file.ts>` | `.agents/context/<domain>.md` | `.agents/patterns/change-critical-zone.md` | `<project-skill>` if any |
+| `<path/to/another.ts>` | `.agents/context/<domain>.md` | — | — |
 
 The full list of critical paths for CI gating lives in `.github/CODEOWNERS`.
 
@@ -95,7 +91,6 @@ For each kind of change, the minimum command(s) the agent must run before declar
 | Data layer / mutations | `<typecheck>` + targeted tests + `<smoke>` if cross-device behaviour involved |
 | Runtime / config / env | `<typecheck>` + `<smoke>` or integration command |
 | Agent memory (`AGENTS.md`, `.agents/**`, `WORKFLOW.md`) | `python scripts/validate_agent_context.py` |
-| Template / blueprint files (this is a template repo) | `python scripts/validate_agent_context.py`, plus a dry-run copy of the touched template into a scratch repo if the surface is non-trivial |
 | Documentation only | check internal links resolve |
 
 If a change spans multiple families, run the union.
@@ -130,21 +125,29 @@ Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-
 Deterministic helpers that make L safe to run with fewer babysitters. The *concept* is universal and lives here; the *Claude wiring* lives under `.claude/` — a thin runtime adapter, the same way `CLAUDE.md` is a thin doc adapter. Other agents wire the equivalent in their own runtime.
 
 - **`.claude/` vs `.agents/`.** `.agents/**` is agent-agnostic doctrine (router, capsules, patterns, rules, workflows). `.claude/**` is Claude-Code-specific runtime (subagents now; hooks/settings at L+). Never put doctrine in `.claude/`; never put Claude runtime in `.agents/`.
-- **Reviewer subagent** (`.claude/agents/harness-reviewer.md`): read-only, narrow `tools:` allowlist, `model: sonnet`. The coder is not the judge. It is the *executable instance* of `.agents/patterns/review-parallel-ticket.md` — invoke it before a PR that touches the harness. Cross-ref, not a copy: the pattern holds the doctrine.
+- **Reviewer subagent** (`.claude/agents/harness-reviewer.md`): read-only, narrow `tools:` allowlist, `model: sonnet`. The coder is not the judge. It is the *executable instance* of `.agents/patterns/review-parallel-ticket.md` — invoke it before a PR that touches a critical zone. Cross-ref, not a copy: the pattern holds the doctrine. Duplicate per domain as your critical zones grow.
 - **Glob-scoped rules**: rules under `.agents/rules/` may carry `globs:` frontmatter to auto-load (zero token cost otherwise) when a matching file is edited. Complementary to the ROUTER, never a replacement — keep both in sync.
 - **Bounded-autonomy doctrine (doctrine only at L).** If a bounded loop is ever run, it MUST carry hard brakes: a budget (iterations / tokens / time), an explicit stop criterion (M0), no-progress detection, and reviewer-subagent verification. **Activation of unattended loops is reserved to the L+ profile** (`/loop`, opt-in, ADR-gated). At L the default stays conservative: clarify, small diff, local validation.
 
-## Autonomy profile (L+ — opt-in, ADR-gated; this repo dogfoods it)
+## Autonomy profile (L+ — opt-in, ADR-gated)
 
-**L+ is not a bigger L. It is a capability profile**: the same L harness, *plus* the wiring to run bounded loops unattended. It is opt-in, gated by `docs/adr/ADR-0002-lplus-autonomous-execution-profile.md`, and **never the default**. By default this repo stays conservative: clarify, small diff, local validation.
+**L+ is not a bigger L. It is a capability profile**: the same L harness, *plus* the wiring to run bounded loops unattended. It is opt-in, gated by an ADR (see `docs/adr/ADR-0002-*`), and **never the default**. By default this repo stays conservative: clarify, small diff, local validation.
 
-Promote to L+ only when **all five** are true: repeated loops with a verifiable goal · real unattended execution · parallel subagents or worktrees · a CI / headless runner exists · budgets and stop-conditions are genuinely needed. None of these → stay at L.
+Promote to L+ only when **all five** are true:
 
-What L+ adds over L (all present and dogfooded here):
+- repeated loops with a verifiable goal,
+- real unattended execution (headless / scheduled),
+- parallel subagents or worktrees in use,
+- a CI / headless runner exists,
+- budgets and stop-conditions are genuinely needed.
 
-- `.agents/workflows/loop.md` — the `/loop` unit-of-work with the **three hard brakes** (budget · no-progress detection · kill-switch) and `harness-reviewer` verification.
-- `.claude/settings.json` + `.claude/hooks/gate_git_push.sh` — push-to-main *defer* gate + denied-permission log (the formatter hook is left to downstream code repos).
-- `.github/workflows/headless-loop.yml` — the headless runner, **manual-dispatch only** until the brakes are exercised.
+None of these → stay at L. Adding L+ to a repo that doesn't need it re-creates exactly the sprawl this blueprint fights.
+
+What L+ adds over L:
+
+- `.agents/workflows/loop.md` — the `/loop` unit-of-work with the **three hard brakes** (budget · no-progress detection · kill-switch) and reviewer verification.
+- `.claude/settings.json` + `.claude/hooks/` — deterministic guardrails (post-tool formatter, push-to-main defer, denied-permission log).
+- `.github/workflows/headless-loop.yml` — the headless runner (manual-dispatch until the ADR + brakes exist).
 
 **Hard rule:** a loop without all three brakes is forbidden. The unattended clause of Karpathy rule 1 applies *only* inside an activated `/loop`.
 
@@ -154,7 +157,7 @@ What L+ adds over L (all present and dogfooded here):
 |---|---|
 | `WORKFLOW.md` | branches, commits, PRs, DoD, CI gates |
 | `STATUS_APP.md` | current state, recent decisions, release checklist |
-| `CLAUDE.md` | Claude adapter (Claude Code is the primary agent) |
+| `CLAUDE.md` | Claude adapter (if applicable) |
 | `.agents/ROUTER.md` | task family → context routing |
 | `.agents/context/*.md` | per-domain critical doctrine |
 | `.agents/patterns/INDEX.md` | registry of patterns ↔ pivot files |
@@ -165,7 +168,7 @@ What L+ adds over L (all present and dogfooded here):
 
 ## Maintenance and evolution
 
-**L is the end of the general additive ladder; L+ is a specialised, opt-in autonomy profile on top of it (ADR-0002) — not a sixth size.** The system maintains itself via:
+**L is the end of the general additive ladder; L+ is a specialised, opt-in autonomy profile on top of it — not a sixth size.** The system maintains itself via:
 
 - `/retro` after every release
 - `/learn` after every meaningful friction or incident
