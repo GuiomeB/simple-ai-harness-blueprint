@@ -16,7 +16,7 @@
 
 ## Working with AI agents on this repo
 
-This repo follows the [Simple AI Harness Blueprint](https://github.com/<owner>/simple-ai-harness-blueprint) at size **L** — the full system, with machine-enforced risk rails and a meta-validator.
+This repo follows the [Simple AI Harness Blueprint](https://github.com/<owner>/simple-ai-harness-blueprint) at size **L** with the **L+** autonomy profile (opt-in, ADR-gated) — the full system, with machine-enforced risk rails, a meta-validator, and bounded unattended loops (`/loop`).
 
 Before generating or modifying code, any AI agent (Cursor, Claude Code, Windsurf, Codex CLI, Antigravity, Copilot, …) must:
 

@@ -61,4 +61,4 @@ M0 plus the reviewer, never the coder's own say-so.
 
 - `AGENTS.md §Autonomy profile` — promotion criteria, budgets, kill-switch.
 - `AGENTS.md` M0 — the verification mechanism this loop runs unattended.
-- `.github/workflows/<headless-loop>.yml` — the headless runner template.
+- `.github/workflows/headless-loop.yml` — the headless runner (manual-dispatch only).
