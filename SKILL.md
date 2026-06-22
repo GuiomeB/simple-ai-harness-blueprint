@@ -82,9 +82,12 @@ your-repo/
 │   │   ├── INDEX.md                      registry: pattern ↔ pivot files in the codebase
 │   │   └── <action-pattern>.md           short copyable procedures (≤ 120 lines)
 │   ├── rules/
-│   │   └── <tech-convention>.md          narrow technical rules (test signatures, smoke scripts)
+│   │   └── <tech-convention>.md          narrow technical rules; may carry `globs:` to auto-load
 │   └── skills/
 │       └── <project-skill>/SKILL.md      project-specific skills / Claude skills where applicable
++ .claude/                                Claude-Code runtime adapter (concept lives in AGENTS.md)
+│   └── agents/
+│       └── <reviewer>.md                 read-only subagent, tools allowlist, model: sonnet
 + docs/
 │   ├── adr/                              Architecture Decision Records
 │   └── learn/                            per-event /learn output (auto-created on first run)
@@ -112,8 +115,12 @@ your-repo/
 | `.agents/patterns/*.md` | 40–120 | 200 |
 | `.agents/workflows/*.md` | 80–200 | 300 |
 | `.agents/skills/*/SKILL.md` | ≤ 200 | 500 |
+| `.claude/agents/*.md` | 30–60 | 120 |
+| `.claude/hooks/*.sh` (L+) | ≤ 40 | 80 |
 
 **Session-init budget:** keep total auto-loaded context ≤ **6 500 lines** across all files an agent reads before its first action. Trade per-doc ceilings against this total — a leaner `ROUTER.md` leaves room for a fatter `WORKFLOW.md`, and vice versa.
+
+**MCP / tool-schema budget:** every connected MCP server spends context tokens on every turn (≈ 10–20k tokens for 50 tools without lazy loading). Cap a serious setup at **≤ 5 servers**; prefer a code-graph/memory server, a Git server, a filesystem server, a web-search server, and a docs server. Fewer servers beats lazy-loading. Subagents with a narrow `tools:` allowlist keep the main loop's schema cost down.
 
 ## The mechanisms (M0–M3) — templates only
 

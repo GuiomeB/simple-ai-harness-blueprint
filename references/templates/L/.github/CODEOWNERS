@@ -25,6 +25,7 @@ AGENTS.md                                       @<owner>
 CLAUDE.md                                       @<owner>
 WORKFLOW.md                                     @<owner>
 .agents/                                        @<owner>
+.claude/                                         @<owner>     # Claude Code runtime: subagents, and at L+ hooks/settings
 scripts/                                        @<owner>
 
 # Project-specific critical zones — REPLACE these with your real paths:

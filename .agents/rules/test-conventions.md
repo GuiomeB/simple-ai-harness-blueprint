@@ -1,8 +1,23 @@
+---
+name: test-conventions
+description: Narrow technical conventions for test files. Auto-loads when a matching test file is edited; also reachable via the ROUTER.
+# `globs:` is the reliable auto-load key for path-scoped rules (the documented
+# `paths:` key is sometimes dropped by current tooling). Adapt these to your
+# stack — they replace `<test-root>` once your real test layout exists.
+globs:
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/tests/**"
+  - "**/test/**"
+---
+
 # Rule — Test conventions
 
 **Scope:** narrow technical conventions for test files. Not doctrine (capsules), not procedures (patterns), not workflows. Just rules.
 
 **Pivot files:** test files under `<test-root>/` or co-located `*.test.ts` / `*.spec.ts` (adapt to your stack).
+
+**How this rule loads:** the `globs:` frontmatter above makes it **auto-load** (zero token cost otherwise) whenever a matching test file is touched. This is *complementary* to `.agents/ROUTER.md`, not a replacement: globs cover "I'm editing file X → load the matching rule"; the ROUTER covers "this task family → load this capsule/pattern". Keep both in sync — a rule reachable by glob should still appear in the ROUTER's relevant rows.
 
 ---
 

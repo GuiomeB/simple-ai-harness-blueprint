@@ -124,6 +124,15 @@ Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-
 | `/learn <scope>` | incident, friction, refactor, blocked candidate | learning loop outside releases |
 | `/tdd-loop` (workflow) | new business logic or new mutation | RED → GREEN → REFACTOR with strict RED-state criteria |
 
+## Execution primitives (subagents, glob-rules, bounded autonomy)
+
+Deterministic helpers that make L safe to run with fewer babysitters. The *concept* is universal and lives here; the *Claude wiring* lives under `.claude/` — a thin runtime adapter, the same way `CLAUDE.md` is a thin doc adapter. Other agents wire the equivalent in their own runtime.
+
+- **`.claude/` vs `.agents/`.** `.agents/**` is agent-agnostic doctrine (router, capsules, patterns, rules, workflows). `.claude/**` is Claude-Code-specific runtime (subagents now; hooks/settings at L+). Never put doctrine in `.claude/`; never put Claude runtime in `.agents/`.
+- **Reviewer subagent** (`.claude/agents/harness-reviewer.md`): read-only, narrow `tools:` allowlist, `model: sonnet`. The coder is not the judge. It is the *executable instance* of `.agents/patterns/review-parallel-ticket.md` — invoke it before a PR that touches the harness. Cross-ref, not a copy: the pattern holds the doctrine.
+- **Glob-scoped rules**: rules under `.agents/rules/` may carry `globs:` frontmatter to auto-load (zero token cost otherwise) when a matching file is edited. Complementary to the ROUTER, never a replacement — keep both in sync.
+- **Bounded-autonomy doctrine (doctrine only at L).** If a bounded loop is ever run, it MUST carry hard brakes: a budget (iterations / tokens / time), an explicit stop criterion (M0), no-progress detection, and reviewer-subagent verification. **Activation of unattended loops is reserved to the L+ profile** (`/loop`, opt-in, ADR-gated). At L the default stays conservative: clarify, small diff, local validation.
+
 ## Reference documents
 
 | Document | Usage |
