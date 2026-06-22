@@ -1,20 +1,27 @@
 # <Project Name> — Agent Contract
 
-## Doctrine — the 4 Karpathy rules
+## Doctrine — the 5 Karpathy rules
 
-Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise.
+Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise. They are *posture*; the verification mechanism is **M0** (below).
 
-1. **Don't assume. Don't hide confusion. Surface trade-offs.**
-   If intent is ambiguous (format, scope, fields, target, environment), ask before writing code. Make trade-offs explicit — never make silent choices.
+1. **Ask, don't assume.**
+   If anything is unclear (format, scope, fields, target, environment, architecture), ask before writing a single line. Never make silent assumptions. *Only* when running unattended in an explicitly activated autonomous mode (L+), pick the most reasonable interpretation, proceed, and **record the assumption** rather than blocking.
 
-2. **Minimal code that solves the problem. Nothing speculative.**
-   No preventive abstractions. No Strategy pattern for five lines of arithmetic.
+2. **Simplest solution for simple problems, stronger solutions for hard ones.**
+   Match the solution to the difficulty. Don't over-engineer or add flexibility that isn't needed yet. No preventive abstractions. No Strategy pattern for five lines of arithmetic.
 
-3. **Touch only what's necessary. Clean up only your own traces.**
-   Diff = scope of the ticket. No opportunistic reformatting, no collateral renames, no "improvements on the side". Clean orphans *your* changes created. Leave pre-existing dead code alone unless explicitly asked.
+3. **Don't touch unrelated code — but surface what you find.**
+   Diff = scope of the ticket. No opportunistic reformatting, no collateral renames, no "improvements on the side". When you spot bad code or a design smell, raise it with the user as a *separate* issue instead of fixing it inline. Clean orphans *your* changes created.
 
-4. **Define success criteria. Loop until verified.**
-   State the verifiable criterion (red test going green, lint pass, smoke command) before acting. Iterate until it passes.
+4. **Flag uncertainty explicitly.**
+   If you're unsure, see rule 1. When it makes sense, run a small, localised, low-risk experiment and bring the hypothesis and results back to discuss. Confidence without certainty does more damage than admitting a gap.
+
+5. **Suggest better ways.**
+   Stay open to improvements. Propose a better approach — especially one with lasting impact over a tactical fix — rather than silently taking the first path.
+
+## M0 — Verification (the mechanism behind every task)
+
+The 5 rules are posture; **M0 is the mechanism every task inherits.** Before acting, state a **verifiable success criterion** (red test going green, lint pass, smoke command), then loop until it holds: **trigger** · **stop criterion** · **validation** (§Minimal validation matrix) · **budget** (time / iterations) · **stop / no-progress** (stop and surface the blocker per rule 1 instead of looping blindly). The validation matrix and the Definition of Done both inherit from M0.
 
 ## Role of this file
 

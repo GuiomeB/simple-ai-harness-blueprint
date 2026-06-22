@@ -17,7 +17,7 @@ If this project uses direct-to-main commits (acceptable at small scale):
 
 A task is done when:
 
-- [ ] All four Karpathy rules satisfied (`AGENTS.md §Doctrine`).
+- [ ] All five Karpathy rules + M0 verification satisfied (`AGENTS.md §Doctrine`).
 - [ ] `<format>` has been run; no formatter drift.
 - [ ] `<typecheck>` passes.
 - [ ] `<test>` passes (or new tests added if behaviour changed).

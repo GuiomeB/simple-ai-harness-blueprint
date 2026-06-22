@@ -4,7 +4,7 @@
 
 ## Doctrine
 
-The 4 Karpathy rules and all project doctrine live in **`AGENTS.md`** — read it first, every session. Never duplicate them here.
+The 5 Karpathy rules (+ the M0 verification mechanism) and all project doctrine live in **`AGENTS.md`** — read it first, every session. Never duplicate them here.
 
 ## Role of this file
 

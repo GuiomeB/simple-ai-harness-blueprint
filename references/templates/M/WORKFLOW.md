@@ -29,7 +29,7 @@ Why: parallel review is faster, parallel agents can collaborate, and rollbacks s
 
 ## 4. Definition of Done (per task / per PR)
 
-- [ ] All four Karpathy rules satisfied (`AGENTS.md §Doctrine`).
+- [ ] All five Karpathy rules + M0 verification satisfied (`AGENTS.md §Doctrine`).
 - [ ] `<format>` run; no formatter drift.
 - [ ] `<typecheck>` passes.
 - [ ] `<test>` passes (or new tests added if behaviour changed).

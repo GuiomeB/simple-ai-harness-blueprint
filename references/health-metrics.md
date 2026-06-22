@@ -87,7 +87,7 @@ Two or more active symptoms simultaneously → schedule a dedicated harness-rewo
 
 ### 7. A new agent (Cursor / Codex / Gemini / …) ignores rules everyone else follows
 
-**Detect:** spot-check a PR from the new agent. Does it cite the 4 Karpathy rules? Did it declare a rail? Did it run the validation matrix?
+**Detect:** spot-check a PR from the new agent. Does it cite the 5 Karpathy rules (and M0)? Did it declare a rail? Did it run the validation matrix?
 
 **First fix:** verify the agent's entry file. Each agent reads a specific config (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursorrules`, …). If the agent reads an unusual file, either symlink `AGENTS.md` to its expected name or write a thin adapter pointing back to `AGENTS.md`.
 

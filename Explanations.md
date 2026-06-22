@@ -20,17 +20,23 @@ This blueprint is what I ended up with after running into those three problems o
 
 ---
 
-## The four Karpathy rules — why these four
+## The five Karpathy rules + M0 — why this shape
 
-The 4 rules at the top of every `AGENTS.md` this blueprint generates aren't original. They've been circulating in the AI-coding community since Andrej Karpathy popularized them (well written up by [Yanli Liu](https://yanliu.medium.com/the-4-rules-of-coding-with-llms-from-karpathy-d3a1c9bd6b66) and others).
+The rules at the top of every `AGENTS.md` this blueprint generates aren't original. They've been circulating in the AI-coding community since Andrej Karpathy popularized them (well written up by [Yanli Liu](https://yanliu.medium.com/the-4-rules-of-coding-with-llms-from-karpathy-d3a1c9bd6b66) and others). This blueprint ships a **revised five-rule form** plus a separated verification mechanism (**M0**) — the lineage is Karpathy's, the revision is this project's.
 
-What makes them right *for this blueprint*:
+What changed from the original four, and why:
 
-- **They cover the four failure modes that recur across agents.** Silent assumptions (rule 1), speculative abstractions (rule 2), scope creep (rule 3), and "good enough" without verification (rule 4) are the four ways an agent burns your time.
-- **They're behavioural, not technical.** They translate across stacks. A team using TypeScript + React and a team using Python + FastAPI both benefit from the same four.
-- **They're short enough to actually be re-read every session.** A 50-rule "agent ethics document" gets skimmed. Four rules with one sentence each get internalized.
+- **Posture and mechanism were split.** The original rule 4 ("define success criteria, loop until verified") is not really *posture* — it's the verification *mechanism* every task runs. Burying it as one bullet among behavioural rules made it the most-skipped one. It's now **M0**, a first-class mechanism stated right after the five rules, with an operational form (trigger · stop criterion · validation · budget · stop/no-progress). The validation matrix, the DoD, `/tdd-loop`, and the L+ `/loop` all inherit from it.
+- **Rule 1 now carries an autonomy clause.** "Ask, don't assume" is unchanged for interactive work, but explicitly scoped: *only* in an activated autonomous mode (L+) does the agent pick the most reasonable interpretation and record the assumption instead of blocking. This keeps the default conservative while making unattended loops possible without contradicting the rule.
+- **Rule 3 now says what to do with smells.** "Don't touch unrelated code" used to imply silence. The revision adds the missing half: surface bad code or design smells as a *separate* issue. Scope discipline shouldn't cost you the signal.
+- **Two genuinely new posture rules.** Rule 4 (flag uncertainty explicitly, prefer a small low-risk experiment over false confidence) and rule 5 (suggest better, lasting-impact approaches) encode collaboration behaviours the original four didn't.
 
-The order matters: rule 1 (don't assume) is the most often violated; rule 4 (loop until verified) is the most often skipped. Reading them in order is the discipline.
+What makes the set right *for this blueprint*:
+
+- **They're behavioural, not technical.** They translate across stacks. A team using TypeScript + React and a team using Python + FastAPI both benefit from the same five.
+- **They're short enough to actually be re-read every session.** A 50-rule "agent ethics document" gets skimmed. Five rules with one sentence each get internalized.
+
+The order matters: rule 1 (ask, don't assume) is the most often violated; M0 (verification) is the most often skipped — which is exactly why it was promoted out of the list into its own mechanism.
 
 ---
 
@@ -108,7 +114,7 @@ A few things this blueprint is and isn't:
 
 If your repo already has agent doctrine, **don't overwrite anything**. Three principles:
 
-1. **Keep what works.** A `CLAUDE.md` you've been refining for six months has captured real knowledge. The blueprint's universal sections (4 Karpathy rules, load order, rail discipline) go *next to* yours, not *over* yours.
+1. **Keep what works.** A `CLAUDE.md` you've been refining for six months has captured real knowledge. The blueprint's universal sections (5 Karpathy rules + M0, load order, rail discipline) go *next to* yours, not *over* yours.
 2. **Add navigation, not redundancy.** The blueprint's biggest value on a mature repo is usually three things: a router (`.agents/ROUTER.md`), a per-event learning loop (`/learn`), and a drift check (the meta-validator at L). Add those three and almost everything else is gravy.
 3. **Adapt the layout.** If you use `.cursor/rules/` or `.windsurf/` instead of `.agents/`, the blueprint's structure is documentation, not law. Place the equivalent content where your existing layout puts it, and note the divergence at the top of `AGENTS.md`.
 
@@ -131,6 +137,6 @@ If you adopt the blueprint and find something missing — open an issue. The who
 
 ## A note on attribution
 
-The 4 Karpathy rules are not mine. The S/M/L framing is mine, but obviously inspired by every "starter / advanced / expert" tiering you've seen. The per-event learning loop emerged from running a real project where a rolling log demonstrably didn't work; I don't claim it's a novel idea, but I do claim the specific shape (one action retained, lands in an executable artefact, audit trail in a per-event file) is what made it stick on my projects.
+The Karpathy rules are not mine — the lineage is his; the revised five-rule form and the M0 split are this project's adaptation. The S/M/L framing is mine, but obviously inspired by every "starter / advanced / expert" tiering you've seen. The per-event learning loop emerged from running a real project where a rolling log demonstrably didn't work; I don't claim it's a novel idea, but I do claim the specific shape (one action retained, lands in an executable artefact, audit trail in a per-event file) is what made it stick on my projects.
 
 If a pattern in here helps you, take it. If a pattern doesn't help you, drop it. The blueprint is opinionated, not dogmatic.

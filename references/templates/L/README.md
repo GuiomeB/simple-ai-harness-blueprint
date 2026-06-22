@@ -20,7 +20,7 @@ This repo follows the [Simple AI Harness Blueprint](https://github.com/<owner>/s
 
 Before generating or modifying code, any AI agent (Cursor, Claude Code, Windsurf, Codex CLI, Antigravity, Copilot, …) must:
 
-1. Read `AGENTS.md` (the universal contract — 4 Karpathy rules + critical zones + commands).
+1. Read `AGENTS.md` (the universal contract — 5 Karpathy rules + M0 + critical zones + commands).
 2. Open `.agents/ROUTER.md` and load the minimum context for the task at hand (capsule + pattern if any).
 3. Declare a **risk rail** (`green` / `amber` / `red`) in the PR body. The CI gate `pr-rail-guard` fails `green` PRs that touch `.github/CODEOWNERS` paths.
 

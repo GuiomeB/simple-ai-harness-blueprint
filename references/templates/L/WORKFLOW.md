@@ -27,7 +27,7 @@ If the estimated diff exceeds **~500 net lines** *or* spans **more than 2 indepe
 
 ## 4. Definition of Done (per task / per PR)
 
-- [ ] All four Karpathy rules satisfied (`AGENTS.md §Doctrine`).
+- [ ] All five Karpathy rules + M0 verification satisfied (`AGENTS.md §Doctrine`).
 - [ ] `<format>` run; no formatter drift.
 - [ ] `<typecheck>` passes.
 - [ ] `<test>` passes (or new tests added if behaviour changed).

@@ -31,10 +31,11 @@ Rules:
 
 ## Karpathy doctrine check
 
-- [ ] No silent assumptions; ambiguities surfaced and resolved before coding
-- [ ] Minimal code, no speculative abstractions
-- [ ] Diff stays within the declared scope; no opportunistic cleanups outside it
-- [ ] Success criterion was defined before acting and is now verified
+- [ ] Rule 1 — no silent assumptions; ambiguities surfaced before coding (autonomous-mode assumptions recorded)
+- [ ] Rule 2 — solution matched to difficulty; no speculative abstractions
+- [ ] Rule 3 — diff within declared scope; smells surfaced as separate issues, not fixed inline
+- [ ] Rule 4 — uncertainty flagged explicitly
+- [ ] M0 — success criterion defined before acting and is now verified
 
 ## Closes / relates to
 
