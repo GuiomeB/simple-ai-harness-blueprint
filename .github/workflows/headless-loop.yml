@@ -1,0 +1,59 @@
+# L+ profile (dogfood) — headless autonomous loop for this blueprint repo.
+#
+# Manual dispatch only, on purpose: the blast radius stays minimal until the
+# budgets and kill-switch in .agents/workflows/loop.md are exercised. Do NOT add
+# a `schedule:` trigger without updating ADR-0002 and confirming the brakes.
+#
+# The PreToolUse gate (.claude/hooks/gate_git_push.sh) defers any push to main;
+# the loop opens a PR instead.
+
+name: headless-loop
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run-loop:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      LOOP_MAX_ITERATIONS: "4"
+      LOOP_TOKEN_BUDGET: "1000000"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Claude Code
+        run: npm i -g @anthropic-ai/claude-code@latest
+
+      - name: Run the harness-coherence loop (headless, brakes enforced)
+        run: |
+          set -o pipefail
+          claude -p \
+            --output-format stream-json \
+            --allowedTools "Read,Grep,Glob,Edit,Bash(python scripts/validate_agent_context.py:*),Bash(git diff:*),mcp__github__*" \
+            --append-system-prompt "You are the L+ loop runner for simple-ai-harness-blueprint. \
+              Obey .agents/workflows/loop.md: verifiable goal, the three hard brakes \
+              (budget=$LOOP_MAX_ITERATIONS iterations / $LOOP_TOKEN_BUDGET tokens, no-progress \
+              detection, kill-switch), reviewer verification via the harness-reviewer subagent. \
+              Never push to main — open a PR; the push gate defers for human approval. If a brake \
+              trips or progress stalls, stop and write the blocker to the job log." \
+            "Run python scripts/validate_agent_context.py. If it reports errors, fix the minimal \
+             harness-coherence issue (broken link, orphan pattern, missing capsule/subagent) and \
+             open a draft PR with the diff. Stop cleanly if it already passes." \
+          | tee loop.ndjson
+
+          if grep -q '"permissionDecision":"defer"' loop.ndjson; then
+            echo "::notice::Loop deferred a push to main — awaiting human approval."
+          fi

@@ -28,6 +28,7 @@ Load the **minimum** context useful for the task at hand. Doesn't replace `AGENT
 | Time-boxed architecture spike | (no capsule) | `patterns/spike-with-revisit-thresholds.md` | none |
 | Retro, friction, refactor learning | (no capsule) | `STATUS_APP.md` if scope is project-wide | `/retro` (release) or `/learn <scope>` |
 | Update the agent system itself (this file, capsules, patterns, `AGENTS.md`) | this file | `WORKFLOW.md`, `patterns/INDEX.md`, run `validate_agent_context.py` after | none |
+| Edit an execution primitive (`.claude/agents/**`, glob-scoped rules, and at L+ hooks/settings) | (no capsule) | `AGENTS.md §Execution primitives`, run `validate_agent_context.py` after | `harness-reviewer` subagent |
 
 Add one row per stable critical domain. Don't pre-create rows for files that don't exist yet.
 

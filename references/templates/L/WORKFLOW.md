@@ -27,7 +27,7 @@ If the estimated diff exceeds **~500 net lines** *or* spans **more than 2 indepe
 
 ## 4. Definition of Done (per task / per PR)
 
-- [ ] All four Karpathy rules satisfied (`AGENTS.md §Doctrine`).
+- [ ] All five Karpathy rules + M0 verification satisfied (`AGENTS.md §Doctrine`).
 - [ ] `<format>` run; no formatter drift.
 - [ ] `<typecheck>` passes.
 - [ ] `<test>` passes (or new tests added if behaviour changed).
@@ -67,4 +67,6 @@ write an ADR under `docs/adr/ADR-<NNNN>-<slug>.md`. See `docs/adr/README.md` for
 
 ## 8. Beyond L
 
-The harness has no further size. Evolution = more patterns, more rules, more project-specific skills under `.agents/skills/`, more ADRs. Not new top-level files. If something doesn't fit, it's a runbook entry or an ADR — not a new blueprint artefact.
+L is the end of the **general** additive ladder — there is no sixth size. Evolution stays horizontal: more patterns, more rules, more project-specific skills under `.agents/skills/`, more ADRs. Not new top-level sizes. If something doesn't fit, it's a runbook entry or an ADR — not a new blueprint artefact.
+
+The one thing layered *on top of* L is **L+**, an opt-in **autonomy profile** (the blueprint ships it as `references/templates/L+/`): the same L harness plus the wiring to run bounded loops unattended (`/loop`, `.claude/` hooks, a headless runner). Adopt it **only** if you actually run unattended loops — record the decision in an ADR, and never let a loop run without its three hard brakes (budget · no-progress detection · kill-switch). It is never the default.

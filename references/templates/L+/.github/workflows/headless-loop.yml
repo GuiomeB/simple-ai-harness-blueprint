@@ -1,0 +1,56 @@
+# L+ profile — headless autonomous loop (opt-in, ADR-gated).
+#
+# Defaults to manual dispatch only. Uncomment the `schedule:` block to run it
+# unattended — but only once the ADR, the budgets, and the kill-switch are in
+# place (AGENTS.md §Autonomy profile, .agents/workflows/loop.md). A loop without
+# hard brakes is forbidden.
+#
+# The PreToolUse gate (.claude/hooks/gate_git_push.sh) defers any push to main;
+# the steps below parse that deferral and pause for human approval instead of
+# pushing at 3am.
+
+name: headless-loop
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 7 * * *"   # enable only after the ADR + brakes exist
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run-loop:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Hard brakes — surfaced as env so the loop and the runner agree on them.
+      LOOP_MAX_ITERATIONS: "6"
+      LOOP_TOKEN_BUDGET: "2000000"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Claude Code
+        run: npm i -g @anthropic-ai/claude-code@latest
+
+      - name: Run the loop (headless, brakes enforced)
+        run: |
+          set -o pipefail
+          claude -p \
+            --output-format stream-json \
+            --allowedTools "Read,Grep,Glob,Write,Edit,Bash(<test>:*),Bash(git diff:*),mcp__github__*" \
+            --append-system-prompt "You are the L+ loop runner. Obey .agents/workflows/loop.md: \
+              verifiable goal, the three hard brakes (budget=$LOOP_MAX_ITERATIONS iterations / \
+              $LOOP_TOKEN_BUDGET tokens, no-progress detection, kill-switch), reviewer verification. \
+              Never push to main — open a PR; the push gate will defer for human approval. \
+              If a brake trips or you stop making progress, stop and write the blocker to the job log." \
+            "<the verifiable task for this loop>" \
+          | tee loop.ndjson
+
+          if grep -q '"permissionDecision":"defer"' loop.ndjson; then
+            echo "::notice::Loop deferred a push to main — awaiting human approval."
+          fi

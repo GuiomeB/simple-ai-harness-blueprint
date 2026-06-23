@@ -11,6 +11,10 @@ __pycache__/
 venv/
 .pytest_cache/
 
+# L+ runtime logs (denied-permission audit trail, written by the hooks).
+# The `.claude/` config, hooks, and subagents ARE tracked; only logs are not.
+/.claude/logs/
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db

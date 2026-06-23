@@ -1,20 +1,35 @@
 # <Project Name> — Agent Contract
 
-## Doctrine — the 4 Karpathy rules
+## Doctrine — the 5 Karpathy rules
 
-Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise.
+Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise. They are *posture*; the verification mechanism is **M0** (below).
 
-1. **Don't assume. Don't hide confusion. Surface trade-offs.**
-   If intent is ambiguous, ask before writing code. Make trade-offs explicit.
+1. **Ask, don't assume.**
+   If anything is unclear — intent, architecture, requirements — ask before writing a single line. Never make silent assumptions. *Only* when running unattended in an explicitly activated autonomous mode (L+), pick the most reasonable interpretation, proceed, and **record the assumption** rather than blocking.
 
-2. **Minimal code that solves the problem. Nothing speculative.**
-   No preventive abstractions.
+2. **Simplest solution for simple problems, stronger solutions for hard ones.**
+   Match the solution to the difficulty. Don't over-engineer or add flexibility that isn't needed yet. No preventive abstractions.
 
-3. **Touch only what's necessary. Clean up only your own traces.**
-   Diff = scope of the ticket. Clean orphans *your* changes created.
+3. **Don't touch unrelated code — but surface what you find.**
+   Diff = scope of the ticket. No opportunistic edits. When you spot bad code or a design smell, raise it with the user as a *separate* issue instead of fixing it inline.
 
-4. **Define success criteria. Loop until verified.**
-   State the verifiable criterion before acting; iterate until it passes.
+4. **Flag uncertainty explicitly.**
+   If you're unsure, see rule 1. When it makes sense, run a small, localised, low-risk experiment and bring the hypothesis and results back to discuss. Confidence without certainty does more damage than admitting a gap.
+
+5. **Suggest better ways.**
+   Stay open to improvements. Propose a better approach — especially one with lasting impact over a tactical fix — rather than silently taking the first path.
+
+## M0 — Verification (the mechanism behind every task)
+
+The 5 rules are posture; **M0 is the mechanism every task inherits.** Before acting, state a **verifiable success criterion**, then loop until it holds. Operational form:
+
+- **Trigger** — what starts the work.
+- **Stop criterion** — the verifiable signal it's done (red test → green, lint clean, smoke passes).
+- **Validation** — the minimum commands from §Minimal validation matrix.
+- **Budget** — a ceiling on time / iterations / tokens.
+- **Stop / no-progress** — if the criterion isn't converging, stop and surface the blocker (rule 1) instead of looping blindly.
+
+The validation matrix, the Definition of Done (`WORKFLOW.md`), `/tdd-loop`, and — at L+ only — `/loop` all inherit from M0.
 
 ## Role of this file
 
@@ -104,6 +119,15 @@ Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-
 | `/learn <scope>` | incident, friction, refactor, blocked candidate | learning loop outside releases |
 | `/tdd-loop` (workflow) | new business logic or new mutation | RED → GREEN → REFACTOR with strict RED-state criteria |
 
+## Execution primitives (subagents, glob-rules, bounded autonomy)
+
+Deterministic helpers that make L safe to run with fewer babysitters. The *concept* is universal and lives here; the *Claude wiring* lives under `.claude/` — a thin runtime adapter, the same way `CLAUDE.md` is a thin doc adapter. Other agents wire the equivalent in their own runtime.
+
+- **`.claude/` vs `.agents/`.** `.agents/**` is agent-agnostic doctrine (router, capsules, patterns, rules, workflows). `.claude/**` is Claude-Code-specific runtime (subagents now; hooks/settings at L+). Never put doctrine in `.claude/`; never put Claude runtime in `.agents/`.
+- **Reviewer subagent** (`.claude/agents/harness-reviewer.md`): read-only, narrow `tools:` allowlist, `model: sonnet`. The coder is not the judge. It is the *executable instance* of `.agents/patterns/review-parallel-ticket.md` — invoke it before a PR that touches a critical zone. Cross-ref, not a copy: the pattern holds the doctrine. Duplicate per domain as your critical zones grow.
+- **Glob-scoped rules**: rules under `.agents/rules/` may carry `globs:` frontmatter to auto-load (zero token cost otherwise) when a matching file is edited. Complementary to the ROUTER, never a replacement — keep both in sync.
+- **Bounded-autonomy doctrine (doctrine only at L).** If a bounded loop is ever run, it MUST carry hard brakes: a budget (iterations / tokens / time), an explicit stop criterion (M0), no-progress detection, and reviewer-subagent verification. **Activation of unattended loops is reserved to the L+ profile** (`/loop`, opt-in, ADR-gated). At L the default stays conservative: clarify, small diff, local validation.
+
 ## Reference documents
 
 | Document | Usage |
@@ -120,7 +144,7 @@ Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-
 
 ## Maintenance and evolution
 
-L is the end of the additive ladder. The system maintains itself via:
+L is the end of the **general** additive ladder; the only thing on top is the opt-in **L+** autonomy profile (`references/templates/L+/`, ADR-gated — not a sixth size). The system maintains itself via:
 
 - `/retro` after every release
 - `/learn` after every meaningful friction or incident

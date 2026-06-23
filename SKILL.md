@@ -1,24 +1,27 @@
 ---
 name: simple-ai-harness-blueprint
-description: Install, audit, or extend an AI-collaboration blueprint on a code repository — the AGENTS.md / CLAUDE.md / .agents/ structure that lets AI agents (Cursor, Claude Code, Codex Desktop/CLI, Windsurf) collaborate without drift. Three additive sizes (S/M/L). Trigger when bootstrapping a new repo's AI scaffold, promoting an existing harness to the next size, or auditing one for sprawl.
+description: Install, audit, or extend an AI-collaboration blueprint on a code repository — the AGENTS.md / CLAUDE.md / .agents/ structure that lets AI agents (Cursor, Claude Code, Codex Desktop/CLI, Windsurf) collaborate without drift. Three additive sizes (S/M/L) plus an opt-in L+ autonomy profile. Trigger when bootstrapping a new repo's AI scaffold, promoting an existing harness to the next size, or auditing one for sprawl.
 ---
 
 # Simple AI Harness Blueprint
 
-A scaffold for repos where AI agents and humans collaborate. Three sizes (S/M/L), strictly additive — filenames never change between levels.
+A scaffold for repos where AI agents and humans collaborate. Three sizes (S/M/L), strictly additive — filenames never change between levels — plus an opt-in **L+** autonomy profile (ADR-gated; not a fourth size).
 
 ## When NOT to use
 
 Skip for product code, PR reviews, IDE configuration, or generic project scaffolding.
 
-## Doctrine — the 4 Karpathy rules
+## Doctrine — the 5 Karpathy rules + M0
 
-Every `AGENTS.md` generated opens with these. They override convenience and other rules in conflict.
+Every `AGENTS.md` generated opens with these. They override convenience and other rules in conflict. The 5 rules are *posture*; **M0** is the verification *mechanism*.
 
-1. **Don't assume. Don't hide confusion. Surface trade-offs.** Ambiguity → ask before coding.
-2. **Minimal code that solves the problem. Nothing speculative.** No preventive abstractions.
-3. **Touch only what's necessary. Clean up only your own traces.** Diff = scope of the ticket.
-4. **Define success criteria. Loop until verified.** State the verifiable criterion before acting.
+1. **Ask, don't assume.** Ambiguity → ask before coding. Only in an explicitly activated autonomous mode (L+): pick the most reasonable interpretation, proceed, record the assumption.
+2. **Simplest solution for simple problems, stronger for hard ones.** No over-engineering, no preventive abstractions.
+3. **Don't touch unrelated code — but surface what you find.** Diff = scope of the ticket; raise smells as a separate issue.
+4. **Flag uncertainty explicitly.** Unsure → see rule 1; a small low-risk experiment + results beats false confidence.
+5. **Suggest better ways.** Propose lasting improvements over tactical fixes.
+
+**M0 — Verification.** Before acting, state a verifiable success criterion and loop until it holds: trigger · stop criterion · validation · budget · stop/no-progress. The validation matrix, DoD, `/tdd-loop`, and (at L+) `/loop` all inherit from M0.
 
 ## Pick the size
 
@@ -36,7 +39,19 @@ Depths of harness, not codebase sizes. Match signals:
 
 Two or more signals at a level → adopt that level. Never jump straight to L on a fresh repo.
 
-**Note on the `AGENTS.md` signal:** a freshly-generated S `AGENTS.md` is itself ~100–150 lines (4 Karpathy rules + critical zones + commands + rail rule + load order). When reading this signal, look at *project-specific accretion on top of the baseline*, not the raw line count.
+**Note on the `AGENTS.md` signal:** a freshly-generated S `AGENTS.md` is itself ~100–150 lines (5 Karpathy rules + M0 + critical zones + commands + rail rule + load order). When reading this signal, look at *project-specific accretion on top of the baseline*, not the raw line count.
+
+### L+ — the autonomy profile (opt-in, not a fourth size)
+
+L+ is **not** the next rung on this matrix. It is a specialised profile layered on an L harness: the same L, plus the wiring to run bounded loops unattended. The size matrix never recommends it — promote only when **all five** are true, and record the decision in an ADR:
+
+- repeated loops with a verifiable goal,
+- real unattended execution (headless / scheduled),
+- parallel subagents or worktrees in use,
+- a CI / headless runner exists,
+- budgets and stop-conditions are genuinely needed.
+
+None of these → stay at L. Adding L+ to a repo that doesn't need it re-creates the sprawl this blueprint fights. A loop without its three hard brakes (budget · no-progress detection · kill-switch) is forbidden.
 
 ## Tree per size
 
@@ -47,7 +62,7 @@ Every level is strictly additive: filenames never change between sizes, you only
 ```
 your-repo/
 ├── README.md
-├── AGENTS.md                            M1 (load order) + 4 Karpathy + critical zones + commands + M3 rail rule
+├── AGENTS.md                            5 Karpathy + M0 verification + M1 (load order) + critical zones + commands + M3 rail rule
 ├── CLAUDE.md                            optional adapter — include only if Claude is a used agent
 ├── WORKFLOW.md                          process + when to invoke /learn (refers to AGENTS.md for rail discipline)
 └── .agents/
@@ -79,9 +94,12 @@ your-repo/
 │   │   ├── INDEX.md                      registry: pattern ↔ pivot files in the codebase
 │   │   └── <action-pattern>.md           short copyable procedures (≤ 120 lines)
 │   ├── rules/
-│   │   └── <tech-convention>.md          narrow technical rules (test signatures, smoke scripts)
+│   │   └── <tech-convention>.md          narrow technical rules; may carry `globs:` to auto-load
 │   └── skills/
 │       └── <project-skill>/SKILL.md      project-specific skills / Claude skills where applicable
++ .claude/                                Claude-Code runtime adapter (concept lives in AGENTS.md)
+│   └── agents/
+│       └── <reviewer>.md                 read-only subagent, tools allowlist, model: sonnet
 + docs/
 │   ├── adr/                              Architecture Decision Records
 │   └── learn/                            per-event /learn output (auto-created on first run)
@@ -96,6 +114,25 @@ your-repo/
 + _local/CI_RULEBOOK.md                   optional, gitignored: rationale of CI/agent choices
 ```
 
+### L+ (additive over L) — the opt-in autonomy profile (ADR-gated, not a size)
+
+```
++ .agents/
+│   └── workflows/
+│       └── loop.md                        /loop unit-of-work: 3 hard brakes + reviewer verification
++ .claude/
+│   ├── settings.json                      hooks: post-tool formatter, push-to-main defer, denied log
+│   └── hooks/
+│       └── gate_git_push.sh               defers `git push … main` for human approval (fail-open)
++ .github/
+│   └── workflows/
+│       └── headless-loop.yml              headless runner — manual-dispatch until brakes are exercised
++ docs/adr/
+    └── ADR-0002-*.md                      records the decision to run autonomously (mandatory)
+```
+
+Promotion to L+ is gated (see §Pick the size → L+). `.claude/logs/` is gitignored. A loop without its three hard brakes is forbidden.
+
 ## File size budgets
 
 | File | Soft target | Hard ceiling |
@@ -109,10 +146,31 @@ your-repo/
 | `.agents/patterns/*.md` | 40–120 | 200 |
 | `.agents/workflows/*.md` | 80–200 | 300 |
 | `.agents/skills/*/SKILL.md` | ≤ 200 | 500 |
+| `.claude/agents/*.md` | 30–60 | 120 |
+| `.claude/hooks/*.sh` (L+) | ≤ 40 | 80 |
 
 **Session-init budget:** keep total auto-loaded context ≤ **6 500 lines** across all files an agent reads before its first action. Trade per-doc ceilings against this total — a leaner `ROUTER.md` leaves room for a fatter `WORKFLOW.md`, and vice versa.
 
-## The 3 mechanisms — templates only
+**MCP / tool-schema budget:** every connected MCP server spends context tokens on every turn (≈ 10–20k tokens for 50 tools without lazy loading). Cap a serious setup at **≤ 5 servers**; prefer a code-graph/memory server, a Git server, a filesystem server, a web-search server, and a docs server. Fewer servers beats lazy-loading. Subagents with a narrow `tools:` allowlist keep the main loop's schema cost down.
+
+## The mechanisms (M0–M3) — templates only
+
+### M0. Verification (lives in `AGENTS.md §Doctrine`, right after the 5 rules)
+
+The mechanism every task inherits — the executable backbone of rule 4. State a verifiable success criterion, then loop until it holds.
+
+```markdown
+## M0 — Verification (the mechanism behind every task)
+
+Before acting, state a verifiable success criterion, then loop until it holds:
+- Trigger — what starts the work.
+- Stop criterion — the verifiable signal it's done (red test → green, lint clean, smoke passes).
+- Validation — the minimum commands from §Minimal validation matrix.
+- Budget — a ceiling on time / iterations / tokens.
+- Stop / no-progress — if not converging, stop and surface the blocker (rule 1), don't loop blindly.
+```
+
+The validation matrix, the DoD, `/tdd-loop`, and (at L+ only) `/loop` all inherit from M0.
 
 ### M1. Init: ordered context load (lives in `CLAUDE.md` or the agent's adapter file)
 
@@ -224,7 +282,7 @@ This repository is both a Claude skill and a Codex Desktop skill. Codex reads th
 
 If the target repo already has its own agent doctrine, **never overwrite**:
 
-- Don't replace an existing `AGENTS.md`. Propose an *additive merge*: keep the project's accreted rules, insert universal sections (4 Karpathy rules, load order, rail discipline) only where they're missing.
+- Don't replace an existing `AGENTS.md`. Propose an *additive merge*: keep the project's accreted rules, insert universal sections (5 Karpathy rules + M0, load order, rail discipline) only where they're missing.
 - Don't create a parallel `.agents/` if the repo uses a different layout (`.cursor/rules/`, `.windsurf/`, custom paths). Adapt: place equivalent content there and note the divergence at the top of `AGENTS.md`.
 - Look for what's *missing*, not for what doesn't match this template. The blueprint's value on a mature repo is usually three things: **navigation** (ROUTER at M), **drift check** (`validate_agent_context.*` at L), **per-event learning loop** (`/learn`). Add only those.
 

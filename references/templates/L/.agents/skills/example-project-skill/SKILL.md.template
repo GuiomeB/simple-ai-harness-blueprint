@@ -27,7 +27,7 @@ description: Template placeholder for a project-specific Claude skill. Rename th
 
 ## Doctrine
 
-The 4 Karpathy rules (`AGENTS.md §Doctrine`) apply. Project-specific rules:
+The 5 Karpathy rules + M0 (`AGENTS.md §Doctrine`) apply. Project-specific rules:
 
 - <Project rule 1>
 - <Project rule 2>

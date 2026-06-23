@@ -120,6 +120,60 @@ def check_router_capsules() -> None:
             )
 
 
+def check_claude_artifacts() -> None:
+    """Validate the Claude-Code runtime adapter under .claude/ (L+ execution primitives).
+
+    - Every .claude/agents/*.md must carry YAML frontmatter with name/tools/model.
+    - .claude/settings.json (if present) must be valid JSON, and every hook
+      `command` that points at a .claude/ script must resolve on disk.
+    - Every `.claude/agents/<x>.md` cited inline in AGENTS.md must exist.
+    """
+    claude = ROOT / ".claude"
+    if not claude.exists():
+        return
+
+    agents_dir = claude / "agents"
+    if agents_dir.exists():
+        for agent in sorted(agents_dir.glob("*.md")):
+            text = read_text(agent)
+            if not text.startswith("---"):
+                errors.append(
+                    f".claude/agents/{agent.name} is missing YAML frontmatter"
+                )
+                continue
+            head = text.split("---", 2)[1] if text.count("---") >= 2 else ""
+            for key in ("name:", "description:", "tools:", "model:"):
+                if key not in head:
+                    warnings.append(
+                        f".claude/agents/{agent.name} frontmatter has no `{key}`"
+                    )
+
+    settings = claude / "settings.json"
+    if settings.exists():
+        try:
+            data = json.loads(read_text(settings))
+        except json.JSONDecodeError as exc:
+            errors.append(f".claude/settings.json is not valid JSON: {exc}")
+        else:
+            for cmd in re.findall(r'"command"\s*:\s*"([^"]+)"', json.dumps(data)):
+                token = cmd.split()[0] if cmd else ""
+                if token.startswith(".claude/") and not (ROOT / token).exists():
+                    errors.append(
+                        f".claude/settings.json references hook `{token}` "
+                        f"which does not exist"
+                    )
+
+    agents_md = ROOT / "AGENTS.md"
+    if agents_md.exists():
+        for match in INLINE_PATH.finditer(read_text(agents_md)):
+            ref = match.group(1).strip()
+            if ref.startswith(".claude/agents/") and "<" not in ref:
+                if not (ROOT / ref).exists():
+                    errors.append(
+                        f"AGENTS.md references {ref} which does not exist"
+                    )
+
+
 def check_commands() -> None:
     """Verify cited `npm run X` and `python scripts/X.py` commands exist."""
     pkg = ROOT / "package.json"
@@ -162,7 +216,7 @@ def collect_doc_files() -> list[Path]:
         ROOT / "README.md",
     ]
     files = [p for p in roots if p.exists()]
-    for subdir in (".agents", "docs"):
+    for subdir in (".agents", ".claude", "docs"):
         d = ROOT / subdir
         if d.exists():
             files.extend(d.rglob("*.md"))
@@ -174,6 +228,7 @@ def main() -> int:
         check_links_in(md)
     check_patterns_index()
     check_router_capsules()
+    check_claude_artifacts()
     check_commands()
 
     for w in warnings:
