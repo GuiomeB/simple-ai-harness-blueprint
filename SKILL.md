@@ -15,6 +15,14 @@ Skip for product code, PR reviews, IDE configuration, or generic project scaffol
 
 Every `AGENTS.md` generated opens with these. They override convenience and other rules in conflict. The 5 rules are *posture*; **M0** is the verification *mechanism*.
 
+**Version stamp.** Every generated `AGENTS.md` carries, right under its title, the line:
+
+```markdown
+> Doctrine: v5 (5 règles Karpathy + M0) — appliquée <YYYY-MM-DD>
+```
+
+Fill the date with the day the doctrine was applied to that repo. The stamp is what makes doctrine drift greppable across a fleet (`scripts/audit_fleet.py` reads it). A repo deliberately left on an older doctrine states it the same way (e.g. `> Doctrine: v4 figée — …`) — a known lag is fine, an invisible one is not.
+
 1. **Ask, don't assume.** Ambiguity → ask before coding. Only in an explicitly activated autonomous mode (L+): pick the most reasonable interpretation, proceed, record the assumption.
 2. **Simplest solution for simple problems, stronger for hard ones.** No over-engineering, no preventive abstractions.
 3. **Don't touch unrelated code — but surface what you find.** Diff = scope of the ticket; raise smells as a separate issue.
@@ -273,7 +281,7 @@ This repository is both a Claude skill and a Codex Desktop skill. Codex reads th
    - **Propose in one sentence with reasoning**, e.g. "Based on no existing `AGENTS.md`, a `.cursorrules` file, and a `.github/` folder, I'd target **M**, with `CLAUDE.md` (you mentioned Claude) and `.github/pull_request_template.md`. Confirm or adjust?"
    - Ask explicit questions **only** when inference is genuinely ambiguous (multiple plausible sizes, conflicting agent markers, or the user contradicts the inference).
    - If existing artefacts exceed the requested level, warn about downgrade risk before removing anything.
-3. **Generate the delta.** For each missing file, propose the matching template from `references/templates/<size>/`. Confirm before writing. Never overwrite silently. **Follow placeholder discipline (see below): do not invent commands, files, or critical zones the target repo doesn't have.**
+3. **Generate the delta.** For each missing file, propose the matching template from `references/templates/<size>/`. Confirm before writing. Never overwrite silently. **Follow placeholder discipline (see below): do not invent commands, files, or critical zones the target repo doesn't have.** In the generated `AGENTS.md`, fill the doctrine version stamp's `<YYYY-MM-DD>` with the current date — it is the one placeholder you always resolve at generation time.
    - The M templates include one **worked example** (a `data-mutations.md` capsule and a matching row in `ROUTER.md`) to model after. Replace or delete the example if mutations aren't a critical domain in the target project, and route the user's own capsules instead.
 4. **Validate.** Print the created tree, run any present `validate:agent-context`, ask the user to skim `AGENTS.md` first.
 5. **Plant the next promotion criterion AND report remaining placeholders.** Add a one-line "promote to next size when X" at the bottom of `AGENTS.md`. Then list every `<placeholder>` left in the generated files (commands, critical zones, project description, etc.) so the user knows exactly what to fill in before the harness becomes operational. An unfilled placeholder is the correct state — a *filled* one with invented content is a lie.
