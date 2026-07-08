@@ -80,7 +80,7 @@ Files where mistakes are expensive. At bootstrap stage the only critical zones a
 | File or zone | Capsule | Pattern | Project skill |
 |---|---|---|---|
 | `AGENTS.md`, `.agents/**`, `WORKFLOW.md` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
-| `scripts/validate_agent_context.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
+| `scripts/validate_agent_context.py`, `scripts/audit_fleet.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
 | `.github/workflows/pr-rail-guard.yml`, `scripts/check_pr_rail_consistency.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
 | `<path/to/future-critical-file>` | `.agents/context/<domain>.md` | `.agents/patterns/change-critical-zone.md` | `<project-skill>` if any |
 

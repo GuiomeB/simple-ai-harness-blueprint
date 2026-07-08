@@ -44,6 +44,12 @@ def find_harnessed_repos(root: Path) -> list[Path]:
     return sorted(repos)
 
 
+def doctrine_version_from_text(text: str) -> str:
+    """Extract doctrine stamp from AGENTS.md body text."""
+    match = STAMP.search(text)
+    return match.group(1) if match else "inconnue"
+
+
 def doctrine_version(agents_md: Path) -> str:
     """Extract the doctrine version stamp from an AGENTS.md.
 
@@ -52,10 +58,35 @@ def doctrine_version(agents_md: Path) -> str:
 
     Returns:
         The stamped version (e.g. "v5", "v4"), or "inconnue" when the file
-        carries no `> Doctrine:` stamp line.
+        carries no `> Doctrine:` stamp line, or "erreur lecture" on I/O failure.
     """
-    match = STAMP.search(agents_md.read_text(encoding="utf-8"))
-    return match.group(1) if match else "inconnue"
+    try:
+        text = agents_md.read_text(encoding="utf-8")
+    except OSError:
+        return "erreur lecture"
+    return doctrine_version_from_text(text)
+
+
+def format_row(root: Path, repo: Path) -> str:
+    """Format one audit table row; survive per-repo read failures."""
+    rel = repo.relative_to(root)
+    agents_md = repo / "AGENTS.md"
+    try:
+        text = agents_md.read_text(encoding="utf-8")
+        lines = len(text.splitlines())
+        doctrine = doctrine_version_from_text(text)
+    except OSError:
+        doctrine = "erreur lecture"
+        lines = "—"
+    return (
+        f"| {rel} "
+        f"| {doctrine} "
+        f"| {lines} "
+        f"| {inferred_size(repo)} "
+        f"| {doc_entries(repo, 'learn')} "
+        f"| {doc_entries(repo, 'retro')} "
+        f"| {last_commit_date(repo)} |"
+    )
 
 
 def inferred_size(repo: Path) -> str:
@@ -97,17 +128,7 @@ def main() -> int:
     print("| Repo | Doctrine | AGENTS.md (lignes) | Taille | learn | retro | Dernier commit |")
     print("|---|---|---|---|---|---|---|")
     for repo in find_harnessed_repos(root):
-        agents_md = repo / "AGENTS.md"
-        lines = len(agents_md.read_text(encoding="utf-8").splitlines())
-        print(
-            f"| {repo.relative_to(root)} "
-            f"| {doctrine_version(agents_md)} "
-            f"| {lines} "
-            f"| {inferred_size(repo)} "
-            f"| {doc_entries(repo, 'learn')} "
-            f"| {doc_entries(repo, 'retro')} "
-            f"| {last_commit_date(repo)} |"
-        )
+        print(format_row(root, repo))
     return 0
 
 
