@@ -11,6 +11,7 @@ The validator script (`scripts/validate_agent_context.py`) checks that every `.m
 | [`change-critical-zone.md`](./change-critical-zone.md) | files flagged CRITICAL in `AGENTS.md §Critical zones` | execution (protocol for editing dangerous code) |
 | [`review-parallel-ticket.md`](./review-parallel-ticket.md) | any PR authored by another agent on a parallel ticket | process (cross-agent review beyond clean diff) |
 | [`spike-with-revisit-thresholds.md`](./spike-with-revisit-thresholds.md) | any architecture choice taken under uncertainty | decision (time-boxed choice with explicit revisit triggers) |
+| [`tiered-model-workflow.md`](./tiered-model-workflow.md) | `docs/loops/**`, any multi-agent or tiered handoff run | execution (tier discovery + Definition of Ready) |
 
 ## Conventions
 
