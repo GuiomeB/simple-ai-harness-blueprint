@@ -1,64 +1,63 @@
 # simple-ai-harness-blueprint — STATUS APP (Source of Truth)
 
-Date: 2026-05-15
+Date: 2026-07-04
 Branch of reference: `main`
-Last production deploy: `none yet` — bootstrap stage; no release cut yet.
-Recent scope: initial scaffold of the size-L harness (AGENTS / CLAUDE / .agents / docs / scripts / .github).
-Next milestone: open-source publication — fill the placeholders, write a README quickstart, add a license, tag `v0.1.0`.
+Last production deploy: n/a — template/skill repo; "production" = published on GitHub (`GuiomeB/simple-ai-harness-blueprint`, MIT).
+Recent scope: doctrine v5 (5 Karpathy rules + M0), L execution primitives, L+ autonomy profile (PR #2, 2026-06-24) ; doctrine version stamp + fleet audit + release checklist (PR courant).
+Next milestone: tag `doctrine-v5`, then keep the fleet green via `scripts/audit_fleet.py`.
 
 ---
 
 ## 1. Snapshot
 
-- Runtime: n/a — documentation + templates only at this stage.
-- Critical zones state: harness scaffold drafted; downstream-facing templates ship with placeholders.
+- Runtime: n/a — documentation + templates + two Python scripts (validator, fleet audit).
+- Critical zones state: harness contract stable in v5; templates S/M/L/L+ aligned (stamp included).
 - Active feature flags: none.
-- Open architectural questions: license choice; whether the project ships a CLI / installer or stays copy-paste.
+- Open architectural questions: none blocking. Distribution of the claude.ai skill copy is manual (re-upload after each doctrine release — see WORKFLOW §8).
 
 ## 2. Progress (axes → state → evidence)
 
 | Axis | State | Evidence |
 |---|---|---|
-| L-harness scaffold (AGENTS / CLAUDE / WORKFLOW / .agents / docs / scripts / .github) | DONE (initial bootstrap) | this repo |
+| L-harness scaffold (AGENTS / CLAUDE / WORKFLOW / .agents / docs / scripts / .github) | DONE | this repo |
 | Meta-validator | DONE | `scripts/validate_agent_context.py` |
 | Risk-rail CI gate | DONE | `.github/workflows/pr-rail-guard.yml`, `scripts/check_pr_rail_consistency.py` |
-| Worked example capsule (`data-mutations.md`) | IN_PROGRESS | kept as pedagogical example; replace or delete once a real domain emerges |
-| Project-specific Claude skill | IN_PROGRESS | template at `.agents/skills/example-project-skill/SKILL.md.template` |
-| Application code / tooling commands | BLOCKED | no app code yet; `<run dev>`, `<typecheck>`, `<lint>`, `<test>`, `<format>`, `<build>`, `<smoke>` to be filled |
-| README quickstart for downstream users | IN_PROGRESS | placeholder section in `README.md` |
-| License | BLOCKED | TBD (MIT or Apache-2.0 likely) |
+| Doctrine v5 (5 rules + M0) | DONE | PR #2 merged 2026-06-24 (`a16b203`) |
+| L+ autonomy profile (dogfooded) | DONE | `docs/adr/ADR-0002-lplus-autonomous-execution-profile.md`, `.claude/hooks/`, `/loop` |
+| Doctrine version stamp + fleet audit + release checklist | IN_PROGRESS | branch `feature/doctrine-versioning` — `scripts/audit_fleet.py`, WORKFLOW §8 |
+| License | DONE | `LICENSE` (MIT) |
+| Worked example capsule (`data-mutations.md`) | DONE | kept with explicit pedagogical role in the M templates |
+| Application code / tooling commands | N/A | template repo by design; `<run dev>` etc. stay placeholders |
 
-States:
-- `DONE` — landed in `main` and validated in the target environment
-- `IN_PROGRESS` — under active work
-- `BLOCKED` — explicit blocker noted in the evidence column
+States: `DONE` — landed in `main` and validated · `IN_PROGRESS` — under active work · `N/A` — intentionally out of scope.
 
 ## 3. Current release checklist
 
-No release in flight. Reactivate this section when cutting `v0.1.0`.
+Doctrine release in flight (versioning PR). Follow `WORKFLOW.md §8`:
 
-- [ ] Scope merged on `main`
-- [ ] `<typecheck>` + `<test>` + `<smoke>` green
-- [ ] PR rail review done
-- [ ] Release doc generated (if applicable)
-- [ ] Preprod / staging validated
-- [ ] Production deploy executed
-- [ ] `/retro` invoked within 24h after deploy
+- [x] Doctrine change merged on `main` (v5, 2026-06-24)
+- [ ] Version stamp + audit + checklist PR merged
+- [ ] STATUS_APP.md up to date (this file)
+- [ ] Tag `doctrine-v5`
+- [ ] claude.ai skill copy re-uploaded
+- [ ] `python scripts/audit_fleet.py` — fleet green or explicitly frozen
 
 ## 4. Recent decisions
 
-- 2026-05-15 — Bootstrap the repo directly at size L (not S → M → L progression) because the project's *purpose* is to ship the L harness as a reference; the audience needs to see the full system. See `docs/adr/ADR-0001-record-architectural-decisions.md` for the decision to use ADRs at all.
+- 2026-07-04 — Add a greppable doctrine version stamp to every generated `AGENTS.md`, a read-only fleet audit script, and a doctrine release checklist (WORKFLOW §8). Motivated by fleet audit: ArrowZ and JSON_2_Sheets silently lagged on the 4-rule doctrine after the 2026-06-24 migration.
+- 2026-06-24 — Doctrine v5: revise Karpathy rules (4→5), promote verification to a separate M0 mechanism; add L execution primitives and the opt-in, ADR-gated L+ autonomy profile (PR #2).
+- 2026-05-15 — Bootstrap the repo directly at size L (see `docs/adr/ADR-0001-record-architectural-decisions.md`).
 
 ## 5. Known debt / signals to watch
 
-- Every `<placeholder>` in `AGENTS.md §Essential commands` and the validation matrix is unresolved by design — they become technical debt the moment app code lands without them being filled.
-- The worked example capsule (`.agents/context/data-mutations.md`) is pedagogical, not project-specific. Decide its fate before publishing: delete (and remove the matching ROUTER row), generalize, or keep with an explicit "example" disclaimer.
-- `.github/CODEOWNERS` owners are placeholder `@<owner>` strings. Replace with a real GitHub handle or team before relying on branch protection.
+- The claude.ai uploaded skill copy does not track this repo — it must be re-uploaded after every doctrine release (WORKFLOW §8 step 3). The `~/.codex/skills` symlink follows automatically.
+- `.github/CODEOWNERS` owners remain placeholder `@<owner>` strings — replace before relying on branch protection.
+- `docs/learn/` and `docs/retro/` are empty on this repo itself: the blueprint's own learning loop has not run yet. First real `/retro` due after the `doctrine-v5` tag.
 
 ## 6. Active references
 
-- `WORKFLOW.md` (process, branches, CI)
-- `AGENTS.md` (universal agent contract)
+- `WORKFLOW.md` (process, branches, CI, doctrine release checklist §8)
+- `AGENTS.md` (universal agent contract — stamped v5)
 - `CLAUDE.md` (Claude adapter)
-- `.agents/ROUTER.md` (task routing)
-- `docs/adr/ADR-0001-record-architectural-decisions.md`
+- `scripts/audit_fleet.py` (fleet-wide doctrine audit)
+- `docs/adr/` (ADR-0001 records, ADR-0002 L+ profile)

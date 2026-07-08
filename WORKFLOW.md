@@ -67,7 +67,20 @@ For any decision that:
 
 write an ADR under `docs/adr/ADR-<NNNN>-<slug>.md`. See `docs/adr/README.md` for the format.
 
-## 8. Beyond L — the L+ autonomy profile
+## 8. Doctrine release checklist
+
+When the doctrine itself changes (rules, M0, sizes) — the failure mode is a fleet
+that silently lags. In order:
+
+1. Merge the doctrine change on `main` and update `STATUS_APP.md`.
+2. Tag the repo: `doctrine-vN`.
+3. Refresh distributed skill copies: `~/.codex/skills` symlink follows
+   automatically; the claude.ai uploaded skill must be re-uploaded manually.
+4. Run `python scripts/audit_fleet.py` and list every repo lagging behind.
+5. For each straggler: migrate it (new stamp date) or freeze it explicitly
+   (`> Doctrine: vN figée — …`). No third state — a lag is either resolved or declared.
+
+## 9. Beyond L — the L+ autonomy profile
 
 L is the end of the **general** additive ladder. There is no sixth size. The only thing on top of L is **L+**, a specialised **opt-in autonomy profile** (recorded in `docs/adr/ADR-0002-lplus-autonomous-execution-profile.md`) — the same L harness plus the wiring to run bounded loops unattended (`/loop`, `.claude/` hooks, the headless runner). L+ is:
 

@@ -1,5 +1,7 @@
 # <Project Name> — Agent Contract
 
+> Doctrine: v5 (5 règles Karpathy + M0) — appliquée <YYYY-MM-DD>
+
 ## Doctrine — the 5 Karpathy rules
 
 Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Antigravity, Copilot, …) applies these rules in order. They override convenience and any other rule in this file when conflicts arise. They are *posture*; the verification mechanism is **M0** (below).
