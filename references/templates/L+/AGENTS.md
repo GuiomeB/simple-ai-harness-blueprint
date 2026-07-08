@@ -147,7 +147,7 @@ None of these → stay at L. Adding L+ to a repo that doesn't need it re-creates
 
 What L+ adds over L:
 
-- `.agents/workflows/loop.md` — the `/loop` unit-of-work with the **three hard brakes** (budget · no-progress detection · kill-switch) and reviewer verification.
+- `.agents/workflows/loop.md` — the `/loop` unit-of-work with the **three hard brakes** (budget · no-progress detection · kill-switch), the goal-spec/state-file contract (`docs/adr/ADR-0003-loop-state-contract.md`), and reviewer verification.
 - `.claude/settings.json` + `.claude/hooks/` — deterministic guardrails (post-tool formatter, push-to-main defer, denied-permission log).
 - `.github/workflows/headless-loop.yml` — the headless runner (manual-dispatch until the ADR + brakes exist).
 
