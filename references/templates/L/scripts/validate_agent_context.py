@@ -8,7 +8,11 @@ Checks (in order):
      in .agents/patterns/INDEX.md, and vice versa.
   3. Every capsule referenced from .agents/ROUTER.md exists under
      .agents/context/.
-  4. Every `npm run X` or `python scripts/X.py` cited in AGENTS.md / WORKFLOW.md
+  4. `.claude/` runtime adapter (agents frontmatter, settings.json hooks,
+     AGENTS.md inline refs).
+  5. `.agents/**` doctrine uses tier vocabulary, not concrete model names
+     (warning via `check_hardcoded_models()`).
+  6. Every `npm run X` or `python scripts/X.py` cited in AGENTS.md / WORKFLOW.md
      points to something callable (best-effort: checks package.json scripts
      and file existence; skips silently if neither resource is available).
 
