@@ -1,11 +1,35 @@
 {
   "//": "L+ dogfood — deterministic guardrails for this repo. Conservative on purpose: a push-to-main defer gate and a denied-permission log. No formatter hook (this is a docs/template repo with no formatter to run). The PostToolUse formatter belongs in downstream code repos; see references/templates/L+/.claude/settings.json for the full template.",
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(python scripts/validate_agent_context.py:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git commit --no-verify:*)",
+      "Read(.env*)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
           { "type": "command", "command": ".claude/hooks/gate_git_push.sh" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/verify_on_stop.sh" }
         ]
       }
     ],
