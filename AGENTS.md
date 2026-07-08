@@ -144,7 +144,7 @@ Promote to L+ only when **all five** are true: repeated loops with a verifiable 
 
 What L+ adds over L (all present and dogfooded here):
 
-- `.agents/workflows/loop.md` — the `/loop` unit-of-work with the **three hard brakes** (budget · no-progress detection · kill-switch) and `harness-reviewer` verification.
+- `.agents/workflows/loop.md` — the `/loop` unit-of-work with the **three hard brakes** (budget · no-progress detection · kill-switch), the goal-spec/state-file contract (`docs/adr/ADR-0003-loop-state-contract.md`), and `harness-reviewer` verification.
 - `.claude/settings.json` + `.claude/hooks/gate_git_push.sh` — push-to-main *defer* gate + denied-permission log (the formatter hook is left to downstream code repos).
 - `.github/workflows/headless-loop.yml` — the headless runner, **manual-dispatch only** until the brakes are exercised.
 
