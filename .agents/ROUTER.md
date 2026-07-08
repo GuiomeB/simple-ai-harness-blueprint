@@ -29,7 +29,7 @@ Load the **minimum** context useful for the task at hand. Doesn't replace `AGENT
 | Retro, friction, refactor learning | (no capsule) | `STATUS_APP.md` if scope is project-wide | `/retro` (release) or `/learn <scope>` |
 | Update the agent system itself (this file, capsules, patterns, `AGENTS.md`) | this file | `WORKFLOW.md`, `patterns/INDEX.md`, run `validate_agent_context.py` after | none |
 | Edit an execution primitive (`.claude/agents/**`, glob-scoped rules, and at L+ hooks/settings) | (no capsule) | `AGENTS.md §Execution primitives`, run `validate_agent_context.py` after | `harness-reviewer` subagent |
-| Run an activated autonomous loop (L+ only, ADR-gated) | (no capsule) | `AGENTS.md §Autonomy profile`, `.agents/workflows/loop.md`, `docs/adr/ADR-0002-lplus-autonomous-execution-profile.md` | `/loop` workflow |
+| Run an activated autonomous loop (L+ only, ADR-gated) | (no capsule) | `AGENTS.md §Autonomy profile`, `.agents/workflows/loop.md`, `docs/adr/ADR-0002-lplus-autonomous-execution-profile.md`, `rules/sensitive-data.md` | `/loop` workflow |
 | Edit a template file shipped to downstream users (`.agents/**`, `docs/adr/**`, `_local/**`) | (no capsule) | `patterns/change-critical-zone.md` (templates ARE the product here) | none |
 
 Add one row per stable critical domain. Don't pre-create rows for files that don't exist yet.
