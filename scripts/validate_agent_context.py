@@ -8,7 +8,11 @@ Checks (in order):
      in .agents/patterns/INDEX.md, and vice versa.
   3. Every capsule referenced from .agents/ROUTER.md exists under
      .agents/context/.
-  4. Every `npm run X` or `python scripts/X.py` cited in AGENTS.md / WORKFLOW.md
+  4. `.claude/` runtime adapter (agents frontmatter, settings.json hooks,
+     AGENTS.md inline refs).
+  5. `.agents/**` doctrine uses tier vocabulary, not concrete model names
+     (warning via `check_hardcoded_models()`).
+  6. Every `npm run X` or `python scripts/X.py` cited in AGENTS.md / WORKFLOW.md
      points to something callable (best-effort: checks package.json scripts
      and file existence; skips silently if neither resource is available).
 
@@ -35,6 +39,9 @@ MD_LINK = re.compile(r"\[[^\]]+\]\(([^)#]+?)(?:#[^)]*)?\)")
 INLINE_PATH = re.compile(r"`([^`]+\.(?:md|py|ts|tsx|yml|yaml|json|sh))`")
 NPM_CMD = re.compile(r"`npm run ([a-zA-Z0-9:_\-]+)`")
 PY_CMD = re.compile(r"`python (scripts/[\w/\-.]+\.py)`")
+HARD_MODEL = re.compile(
+    r"\b(opus|sonnet|haiku|gpt-\d|gemini-\d|o[13]-)\b", re.IGNORECASE
+)
 
 
 def read_text(path: Path) -> str:
@@ -174,6 +181,28 @@ def check_claude_artifacts() -> None:
                     )
 
 
+def check_hardcoded_models() -> None:
+    """Warn when `.agents/**` doctrine names concrete models (tiers only)."""
+    agents = ROOT / ".agents"
+    if not agents.exists():
+        return
+    for md in sorted(agents.rglob("*.md")):
+        text = read_text(md)
+        in_fence = False
+        for lineno, line in enumerate(text.splitlines(), start=1):
+            stripped = line.strip()
+            if stripped.startswith("```"):
+                in_fence = not in_fence
+                continue
+            if in_fence:
+                continue
+            if HARD_MODEL.search(line):
+                warnings.append(
+                    f"{md.relative_to(ROOT)}:{lineno} names a concrete model; "
+                    f"use tier vocabulary (top/mid/low/cross-family)"
+                )
+
+
 def check_commands() -> None:
     """Verify cited `npm run X` and `python scripts/X.py` commands exist."""
     pkg = ROOT / "package.json"
@@ -229,6 +258,7 @@ def main() -> int:
     check_patterns_index()
     check_router_capsules()
     check_claude_artifacts()
+    check_hardcoded_models()
     check_commands()
 
     for w in warnings:
