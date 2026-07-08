@@ -1,5 +1,22 @@
 {
   "//": "L+ profile — deterministic guardrails for unattended/headless runs. The PostToolUse formatter is the highest-ROI hook: keep files clean before the next turn. The PreToolUse gate defers any push to main for human approval (works with headless deferred permissions). Replace <format> with your real formatter; the `|| true` keeps it safe until then.",
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(python scripts/validate_agent_context.py:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git commit --no-verify:*)",
+      "Read(.env*)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -14,6 +31,13 @@
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           { "type": "command", "command": "<format> \"$CLAUDE_TOOL_FILE_PATH\" >/dev/null 2>&1 || true" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/verify_on_stop.sh" }
         ]
       }
     ],

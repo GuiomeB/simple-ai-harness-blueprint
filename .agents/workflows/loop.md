@@ -96,6 +96,8 @@ Six levels — record the active level in SPEC.md. New loops start at **≤ 2**.
 Promotion: after **three stable runs** at the current level, a human may bump
 the level in SPEC.md. Demote immediately on any boundary violation.
 
+Sensitive-data policy: `.agents/rules/sensitive-data.md`.
+
 ## Scheduled run policy
 
 When a loop runs on a schedule (including `/loop` in Claude Code):

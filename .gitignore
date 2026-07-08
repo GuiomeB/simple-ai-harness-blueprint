@@ -14,6 +14,7 @@ venv/
 # L+ runtime logs (denied-permission audit trail, written by the hooks).
 # The `.claude/` config, hooks, and subagents ARE tracked; only logs are not.
 /.claude/logs/
+/.claude/settings.local.json
 
 # OS / editor cruft
 .DS_Store
