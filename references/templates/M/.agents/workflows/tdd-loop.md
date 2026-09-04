@@ -54,6 +54,20 @@ If you cannot get to RED with a clean assertion error after 2 attempts:
 - The behaviour being captured may be ambiguous → return to the user for clarification (Karpathy rule 1).
 - The zone may need a new pattern (at L) or a capsule update.
 
+## Red flags — stop, you are rationalising
+
+These thoughts are the loop being skipped, not a judgement call. Each one has a
+standard answer; none of them is an exemption.
+
+| Thought | Reality |
+|---|---|
+| "I'll write the test once I've confirmed the fix works" | An untested fix doesn't stick. The test written first is what *proves* the fix. |
+| "RED failed with a `TypeError`, close enough" | That is not a RED state (see §RED). Fix the test, not the implementation. |
+| "This is too simple to need a test" | The zones in §Mandatory zones carry no simplicity exemption. |
+| "It's urgent, no time for the loop" | The loop is faster than guess-and-check. Skipping it trades minutes for hours. |
+| "While I'm in here, let me also clean up X" | GREEN is minimal by definition. Out-of-scope edits violate Karpathy rule 3. |
+| "I'll refactor everything and run the tests at the end" | REFACTOR keeps tests green at each non-trivial step, not once at the end. |
+
 ## Exit criteria
 
 A `/tdd-loop` is complete when:
