@@ -6,7 +6,7 @@ Each harnessed repo under `~/Dev` is on doctrine v5 or explicitly frozen; no sil
 
 ## Done when
 
-- `python scripts/audit_fleet.py` completes successfully.
+- `python3 scripts/audit_fleet.py` completes successfully.
 - Report written to `docs/loops/fleet-audit/reports/<YYYY-MM-DD>.md`.
 - `STATE.md` updated with PASS/FAIL and any repos needing human review.
 - Zero repos on `inconnue` or stale doctrine without a documented freeze.

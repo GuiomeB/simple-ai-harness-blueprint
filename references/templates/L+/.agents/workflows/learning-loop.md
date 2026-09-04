@@ -62,7 +62,7 @@ Lands in: <target artefact — e.g. AGENTS.md, a capsule, a pattern, a rule, a p
 3. **Validate with the user.** Confirm factual accuracy, the action retained, and its landing place. Do not diffuse without confirmation.
 4. **Diffuse.** Edit the target artefact. Minimal — one action, one diff.
 5. **Write the trace.** Create `docs/learn/LEARN_<family>_<slug>_<YYYY-MM-DD>.md` with the template above, including the `Diffusion` section.
-6. **Run the validator.** `python scripts/validate_agent_context.py`. The diffusion must not break the harness's internal coherence.
+6. **Run the validator.** `python3 scripts/validate_agent_context.py`. The diffusion must not break the harness's internal coherence.
 7. **Conclude in 3 lines.** What was created or updated; the action retained and its destination; the next moment a `/learn` is worth running.
 
 ## What this workflow is NOT for

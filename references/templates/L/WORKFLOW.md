@@ -33,7 +33,7 @@ If the estimated diff exceeds **~500 net lines** *or* spans **more than 2 indepe
 - [ ] `<test>` passes (or new tests added if behaviour changed).
 - [ ] `<smoke>` or integration command run if a critical zone or runtime is touched.
 - [ ] Risk rail declared in the PR body (`green` / `amber` / `red`).
-- [ ] If the PR touches `AGENTS.md`, `.agents/**`, or `WORKFLOW.md`: `python scripts/validate_agent_context.py` ran clean.
+- [ ] If the PR touches `AGENTS.md`, `.agents/**`, or `WORKFLOW.md`: `python3 scripts/validate_agent_context.py` ran clean.
 - [ ] If a friction recurred or a procedure emerged: `/learn` invoked.
 
 ## 5. Risk rail enforcement at L

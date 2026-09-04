@@ -24,7 +24,7 @@ Never load large documents "just in case". Never load more than 3 capsules + pat
 
 ## Conditional context loading (Claude-specific shortcuts)
 
-- change in `AGENTS.md`, `.agents/**`, `WORKFLOW.md`, or `scripts/validate_agent_context.py` → after edit, run `python scripts/validate_agent_context.py`
+- change in `AGENTS.md`, `.agents/**`, `WORKFLOW.md`, or `scripts/validate_agent_context.py` → after edit, run `python3 scripts/validate_agent_context.py`
 - change in `.github/workflows/pr-rail-guard.yml` or `scripts/check_pr_rail_consistency.py` → load `.agents/patterns/change-critical-zone.md`; reason about CODEOWNERS coverage before editing
 - change in a template under `.agents/`, `docs/adr/`, `_local/` that ships to downstream users → mentally dry-run a copy into a fresh repo before declaring done
 

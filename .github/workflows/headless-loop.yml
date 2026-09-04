@@ -42,14 +42,14 @@ jobs:
           set -o pipefail
           claude -p \
             --output-format stream-json \
-            --allowedTools "Read,Grep,Glob,Edit,Bash(python scripts/validate_agent_context.py:*),Bash(git diff:*),mcp__github__*" \
+            --allowedTools "Read,Grep,Glob,Edit,Bash(python3 scripts/validate_agent_context.py:*),Bash(git diff:*),mcp__github__*" \
             --append-system-prompt "You are the L+ loop runner for simple-ai-harness-blueprint. \
               Obey .agents/workflows/loop.md: verifiable goal, the three hard brakes \
               (budget=$LOOP_MAX_ITERATIONS iterations / $LOOP_TOKEN_BUDGET tokens, no-progress \
               detection, kill-switch), reviewer verification via the harness-reviewer subagent. \
               Never push to main — open a PR; the push gate defers for human approval. If a brake \
               trips or progress stalls, stop and write the blocker to the job log." \
-            "Run python scripts/validate_agent_context.py. If it reports errors, fix the minimal \
+            "Run python3 scripts/validate_agent_context.py. If it reports errors, fix the minimal \
              harness-coherence issue (broken link, orphan pattern, missing capsule/subagent) and \
              open a draft PR with the diff. Stop cleanly if it already passes." \
           | tee loop.ndjson

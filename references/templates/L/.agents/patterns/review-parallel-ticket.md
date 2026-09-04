@@ -39,7 +39,7 @@ Does the PR preserve the invariants of the zone?
 Run the validation matrix step for the touched zone (`AGENTS.md §Minimal validation matrix`). Locally. Don't trust the CI alone.
 
 - If tests pass locally but the validation feels superficial → ask for an additional test that exercises the invariant.
-- If the PR touches `AGENTS.md` / `.agents/**`: run `python scripts/validate_agent_context.py`.
+- If the PR touches `AGENTS.md` / `.agents/**`: run `python3 scripts/validate_agent_context.py`.
 
 ### 5. Risk rail consistency
 
@@ -72,5 +72,5 @@ This pattern is **generic**. It applies whether the implementer is a human, an a
 After editing this pattern, run:
 
 ```bash
-python scripts/validate_agent_context.py
+python3 scripts/validate_agent_context.py
 ```
