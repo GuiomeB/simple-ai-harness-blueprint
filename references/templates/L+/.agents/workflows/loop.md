@@ -1,5 +1,5 @@
 ---
-description: The /loop workflow — the L+ autonomous-execution profile. Opt-in, ADR-gated. Turns a unit of work into a self-driving loop with hard brakes. NOT a default. The agent only enters this mode when explicitly activated.
+description: Use when an unattended autonomous run has been explicitly activated on this repo (L+ profile, ADR-gated). Not for ordinary interactive work.
 ---
 
 # `/loop` workflow (L+ profile only)

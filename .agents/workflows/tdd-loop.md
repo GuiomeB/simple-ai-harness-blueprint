@@ -1,5 +1,5 @@
 ---
-description: Test-driven development state machine for new business logic or new mutations. Optional but typical at size M. Hard rule on the RED state to prevent false positives.
+description: Use when adding or changing business logic, a mutation, or any behaviour in a zone flagged critical — before writing the implementation.
 ---
 
 # `/tdd-loop` workflow

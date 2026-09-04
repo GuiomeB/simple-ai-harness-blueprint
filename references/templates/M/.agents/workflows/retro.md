@@ -1,5 +1,5 @@
 ---
-description: Post-release retrospective. Invoke within 24h after every release of a cycle (GO or NO-GO). Captures what helped, what slowed us down, and ONE action to diffuse into the system.
+description: Use within 24h after every release of a cycle, GO or NO-GO.
 ---
 
 # `/retro` workflow
