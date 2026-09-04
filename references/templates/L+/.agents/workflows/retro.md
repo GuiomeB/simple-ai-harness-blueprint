@@ -69,7 +69,7 @@ Create `docs/retro/RETRO_CYCLE_<YYYY-MM-DD>.md` with the draft above, plus:
 ### 6. Run the validator
 
 ```
-python scripts/validate_agent_context.py
+python3 scripts/validate_agent_context.py
 ```
 
 If the validator reports new warnings or errors, fix them or document an explicit exception in `_local/CI_RULEBOOK.md`.

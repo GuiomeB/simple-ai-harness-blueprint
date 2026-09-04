@@ -1,7 +1,7 @@
 ---
 name: harness-reviewer
 description: Read-only reviewer for changes to this blueprint's harness surface (AGENTS.md, .agents/**, templates, scripts, CI). Invoke proactively before opening a PR that touches the harness or the shipped templates. The executable instance of .agents/patterns/review-parallel-ticket.md — that pattern carries the doctrine, this agent runs the check.
-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*), Bash(python scripts/validate_agent_context.py:*)
+tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*), Bash(python3 scripts/validate_agent_context.py:*)
 model: sonnet
 ---
 
@@ -25,7 +25,7 @@ never edit, write, or push. The coder is not the judge — that separation is th
    paths, critical zones the repo doesn't actually have). Empty placeholders are the correct state.
 4. **Registration coherence.** Every new pattern is in `patterns/INDEX.md`; every capsule the
    ROUTER cites exists; every new `.claude/` artefact (hook script, subagent) referenced from
-   `AGENTS.md` exists. Run `python scripts/validate_agent_context.py` and report its exit state.
+   `AGENTS.md` exists. Run `python3 scripts/validate_agent_context.py` and report its exit state.
 5. **Rail consistency.** A diff touching a `.github/CODEOWNERS` path must not be declared `green`.
 6. **Default-conservative.** No change makes unattended autonomy the default. Any autonomy is L+
    and explicitly activated, with hard brakes (budget, stop/no-progress, kill-switch).

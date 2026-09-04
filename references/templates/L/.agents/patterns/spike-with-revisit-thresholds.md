@@ -88,5 +88,5 @@ This is a **generic decision pattern**. Use the same shape regardless of whether
 After adding an ADR that uses this pattern, run:
 
 ```bash
-python scripts/validate_agent_context.py
+python3 scripts/validate_agent_context.py
 ```

@@ -123,7 +123,7 @@ When a loop runs on a schedule (including `/loop` in Claude Code):
    context (CI, issues, recent commits). Read-only.
 2. **Pick the next action** toward the verifiable goal. One action.
 3. **Do it** in an isolated worktree / branch. Never on `main`.
-4. **Verify** — run `python scripts/validate_agent_context.py` when the harness
+4. **Verify** — run `python3 scripts/validate_agent_context.py` when the harness
    is touched; invoke the `harness-reviewer` subagent
    (`.claude/agents/harness-reviewer.md`, read-only, the coder is not the judge).
 5. **Decide.** Goal met → open a PR (push to `main` is hook-deferred for human

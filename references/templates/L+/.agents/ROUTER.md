@@ -46,4 +46,5 @@ Add one row per stable critical domain. Don't pre-create rows for files that don
 - Don't load `STATUS_APP.md` by default for small local tasks. Reserve for release, runtime, auth, or roadmap topics.
 - Patterns are loaded **in addition to** capsules, not in place of. A capsule defines doctrine; a pattern defines a procedure.
 - Never load more than **3 capsules + patterns** simultaneously. If it feels like more, the task is over-scoped — split it (`WORKFLOW.md §2`).
-- After updating the router or any `.agents/**` file, run `python scripts/validate_agent_context.py`.
+- A `description:` (workflow, rule, skill) states **when** to invoke the file, never **what it does**: an agent that reads a summary of the procedure follows the summary instead of opening the file.
+- After updating the router or any `.agents/**` file, run `python3 scripts/validate_agent_context.py`.

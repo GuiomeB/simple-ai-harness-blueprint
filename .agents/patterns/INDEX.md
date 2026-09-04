@@ -26,7 +26,7 @@ The validator script (`scripts/validate_agent_context.py`) checks that every `.m
 2. Identify the pivot file(s) or trigger(s).
 3. Write the pattern (≤ 120 lines) following the shape of an existing one.
 4. Add a row to this INDEX with the pattern, pivots, and shape.
-5. Run `python scripts/validate_agent_context.py` to verify the registration.
+5. Run `python3 scripts/validate_agent_context.py` to verify the registration.
 6. If the pattern routes from a specific task family, add a row in `.agents/ROUTER.md`.
 
 ## Removing a pattern

@@ -61,7 +61,7 @@ For a `spike` ADR, add Revisit thresholds, Fallback, and a Revisit-by date — s
 - One decision per ADR. If you find yourself writing a second decision, write a second ADR.
 - ADRs are append-only as a corpus, but individual ADRs can be edited until they reach `accepted` status. After `accepted`, edits are restricted to clarifications and superseding.
 - Reference ADRs from `AGENTS.md`, capsules, or patterns when the doctrine you're documenting traces back to a specific decision.
-- Run `python scripts/validate_agent_context.py` after adding or editing an ADR — it catches broken cross-links.
+- Run `python3 scripts/validate_agent_context.py` after adding or editing an ADR — it catches broken cross-links.
 
 ## Recommended first ADR
 

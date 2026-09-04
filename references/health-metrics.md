@@ -53,7 +53,7 @@ Two or more active symptoms simultaneously → schedule a dedicated harness-rewo
 
 ### 4. `.agents/` files contradict each other
 
-**Detect:** run `python scripts/validate_agent_context.py`. Errors are usually broken links or orphan patterns. Read the warnings — they often expose dead capsules or unrouted patterns.
+**Detect:** run `python3 scripts/validate_agent_context.py`. Errors are usually broken links or orphan patterns. Read the warnings — they often expose dead capsules or unrouted patterns.
 
 **First fix:** run a `/learn refactor harness-coherence-<date>` that decides one rule and removes the contradictory one. Update the validator's expectations if needed.
 
@@ -97,7 +97,7 @@ Two or more active symptoms simultaneously → schedule a dedicated harness-rewo
 
 ### 8. Patterns INDEX has dangling references or orphan files
 
-**Detect:** `python scripts/validate_agent_context.py` reports orphan patterns or ghost INDEX entries.
+**Detect:** `python3 scripts/validate_agent_context.py` reports orphan patterns or ghost INDEX entries.
 
 **First fix:** for each orphan on disk — add the row in INDEX. For each ghost in INDEX — either restore the file or remove the row.
 
