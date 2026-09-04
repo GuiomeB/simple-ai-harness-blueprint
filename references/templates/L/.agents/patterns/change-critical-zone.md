@@ -53,5 +53,5 @@ This is a **generic execution pattern**. Don't write a project-specific copy unl
 After editing this file or adding a sibling pattern, run:
 
 ```bash
-python scripts/validate_agent_context.py
+python3 scripts/validate_agent_context.py
 ```

@@ -29,7 +29,7 @@ Rules:
 - [ ] `<typecheck>` passes
 - [ ] `<test>` passes (new tests added if behaviour changed)
 - [ ] If a critical zone was touched: `<smoke>` or relevant integration command ran
-- [ ] If `AGENTS.md` / `.agents/**` / `WORKFLOW.md` were touched: `python scripts/validate_agent_context.py` ran clean
+- [ ] If `AGENTS.md` / `.agents/**` / `WORKFLOW.md` were touched: `python3 scripts/validate_agent_context.py` ran clean
 - [ ] If runtime / release was touched: relevant doc (`STATUS_APP.md`, runbook) still accurate
 
 ## Karpathy doctrine check

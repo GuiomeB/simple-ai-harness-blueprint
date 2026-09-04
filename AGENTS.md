@@ -68,7 +68,7 @@ Open-source template repo (`simple-ai-harness-blueprint`) providing a copyable A
 <format>                  # formatter — run before every commit (n/a at bootstrap stage)
 <build>                   # production build (n/a at bootstrap stage)
 <smoke>                   # smoke / integration check (n/a at bootstrap stage)
-python scripts/validate_agent_context.py    # meta-validator (this harness)
+python3 scripts/validate_agent_context.py    # meta-validator (this harness)
 ```
 
 Replace each `<placeholder>` once the corresponding tool is wired in. Until then, only the validator is operational.
@@ -96,8 +96,8 @@ For each kind of change, the minimum command(s) the agent must run before declar
 | Business logic | `<typecheck>` + targeted tests |
 | Data layer / mutations | `<typecheck>` + targeted tests + `<smoke>` if cross-device behaviour involved |
 | Runtime / config / env | `<typecheck>` + `<smoke>` or integration command |
-| Agent memory (`AGENTS.md`, `.agents/**`, `WORKFLOW.md`) | `python scripts/validate_agent_context.py` |
-| Template / blueprint files (this is a template repo) | `python scripts/validate_agent_context.py`, plus a dry-run copy of the touched template into a scratch repo if the surface is non-trivial |
+| Agent memory (`AGENTS.md`, `.agents/**`, `WORKFLOW.md`) | `python3 scripts/validate_agent_context.py` |
+| Template / blueprint files (this is a template repo) | `python3 scripts/validate_agent_context.py`, plus a dry-run copy of the touched template into a scratch repo if the surface is non-trivial |
 | Documentation only | check internal links resolve |
 
 If a change spans multiple families, run the union.
@@ -115,7 +115,7 @@ Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-
 - After every release of a cycle: invoke `/retro` (see `.agents/workflows/retro.md`).
 - For everything else worth capturing (incident, recurring friction, refactor, blocked candidate): invoke `/learn` (see `.agents/workflows/learning-loop.md`).
 - Hard constraint in both: **one action retained**, lands in the most actionable artefact, validated with the user before diffusion.
-- After every diffusion that touches `.agents/**` or `AGENTS.md`: re-run `python scripts/validate_agent_context.py`.
+- After every diffusion that touches `.agents/**` or `AGENTS.md`: re-run `python3 scripts/validate_agent_context.py`.
 
 ## Skills and workflows
 
@@ -171,7 +171,7 @@ What L+ adds over L (all present and dogfooded here):
 
 - `/retro` after every release
 - `/learn` after every meaningful friction or incident
-- `python scripts/validate_agent_context.py` after every `.agents/**` edit
+- `python3 scripts/validate_agent_context.py` after every `.agents/**` edit
 - the non-blocking CI job `agent-context` for ambient drift detection
 
 Further extension means: more patterns under `.agents/patterns/` (each ≤ 120 lines, keyed to pivot files, registered in `patterns/INDEX.md`), more rules under `.agents/rules/`, more project-specific skills under `.agents/skills/`. Not new top-level files. Not more capsules without a `ROUTER.md` entry. Not more files outside the validator's scope.

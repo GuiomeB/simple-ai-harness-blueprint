@@ -26,7 +26,7 @@ Never load large documents "just in case". Never load more than 3 capsules + pat
 
 - change in `<critical-zone-1>` → load `.agents/context/<domain-1>.md` + (if procedure recurs) `.agents/patterns/<pattern>.md`
 - change in `<critical-zone-2>` → load `.agents/context/<domain-2>.md` + relevant pattern
-- change to agent memory (`AGENTS.md`, `.agents/**`, `WORKFLOW.md`) → after edit, run `python scripts/validate_agent_context.py`
+- change to agent memory (`AGENTS.md`, `.agents/**`, `WORKFLOW.md`) → after edit, run `python3 scripts/validate_agent_context.py`
 
 Add one bullet per stable shortcut as it emerges. If a shortcut recurs in 3+ sessions, promote it to a row in `.agents/ROUTER.md`.
 

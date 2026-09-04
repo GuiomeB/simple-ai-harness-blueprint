@@ -33,7 +33,7 @@ If the estimated diff exceeds **~500 net lines** *or* spans **more than 2 indepe
 - [ ] `<test>` passes (or new tests added if behaviour changed).
 - [ ] `<smoke>` or integration command run if a critical zone or runtime is touched.
 - [ ] Risk rail declared in the PR body (`green` / `amber` / `red`).
-- [ ] If the PR touches `AGENTS.md`, `.agents/**`, or `WORKFLOW.md`: `python scripts/validate_agent_context.py` ran clean.
+- [ ] If the PR touches `AGENTS.md`, `.agents/**`, or `WORKFLOW.md`: `python3 scripts/validate_agent_context.py` ran clean.
 - [ ] If a friction recurred or a procedure emerged: `/learn` invoked.
 
 > At bootstrap stage, the `<format>` / `<typecheck>` / `<test>` / `<smoke>` items are no-ops until those tools are wired up. The validator item is operational from day one.
@@ -76,7 +76,7 @@ that silently lags. In order:
 2. Tag the repo: `doctrine-vN`.
 3. Refresh distributed skill copies: `~/.codex/skills` symlink follows
    automatically; the claude.ai uploaded skill must be re-uploaded manually.
-4. Run `python scripts/audit_fleet.py` and list every repo lagging behind.
+4. Run `python3 scripts/audit_fleet.py` and list every repo lagging behind.
 5. For each straggler: migrate it (new stamp date) or freeze it explicitly
    (`> Doctrine: vN figée — …`). No third state — a lag is either resolved or declared.
 

@@ -71,5 +71,5 @@ A `/learn` entry that lands here means a new test convention has emerged. Promot
 After editing, run:
 
 ```bash
-python scripts/validate_agent_context.py
+python3 scripts/validate_agent_context.py
 ```

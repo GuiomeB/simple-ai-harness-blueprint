@@ -24,7 +24,7 @@ Before generating or modifying code, any AI agent (Cursor, Claude Code, Windsurf
 2. Open `.agents/ROUTER.md` and load the minimum context for the task at hand (capsule + pattern if any).
 3. Declare a **risk rail** (`green` / `amber` / `red`) in the PR body. The CI gate `pr-rail-guard` fails `green` PRs that touch `.github/CODEOWNERS` paths.
 
-After every diffusion that touches `AGENTS.md`, `.agents/**`, or `WORKFLOW.md`, run `python scripts/validate_agent_context.py`.
+After every diffusion that touches `AGENTS.md`, `.agents/**`, or `WORKFLOW.md`, run `python3 scripts/validate_agent_context.py`.
 
 ## Learning loop
 
