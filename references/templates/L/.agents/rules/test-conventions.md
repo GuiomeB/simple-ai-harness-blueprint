@@ -1,6 +1,6 @@
 ---
 name: test-conventions
-description: Narrow technical conventions for test files. Auto-loads when a matching test file is edited; also reachable via the ROUTER.
+description: Auto-loads when a matching test file is edited; also reachable via the ROUTER when writing or changing tests.
 # `globs:` is the reliable auto-load key for path-scoped rules (the documented
 # `paths:` key is sometimes dropped by current tooling). Adapt these to your
 # stack — they replace `<test-root>` once your real test layout exists.
