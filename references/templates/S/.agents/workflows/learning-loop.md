@@ -36,6 +36,7 @@ Use this exact template. Keep it under 40 lines total.
 
 ## What slowed us down
 - <2–4 concrete bullets>
+> Rationalisation observed (when a rule was bypassed): "<verbatim>"
 
 ## One action retained
 > <imperative, present tense, under 20 words>
@@ -56,6 +57,8 @@ Lands in: <target artefact — e.g. AGENTS.md, WORKFLOW.md, an existing capsule,
 
 1. **Qualify the event.** Choose the family. State in one sentence what triggered the `/learn`.
 2. **Draft the four blocks.** What helped, what slowed us down, the one action, where it lands.
+   When a rule was bypassed rather than missing, capture the *verbatim* excuse that justified the
+   bypass first, and write the action against that excuse.
 3. **Validate with the user.** Confirm factual accuracy, the action retained, and its landing place. Do not diffuse without confirmation.
 4. **Diffuse.** Edit the target artefact. Keep the edit minimal — one action, one diff.
 5. **Write the trace.** Create `docs/learn/LEARN_<family>_<slug>_<YYYY-MM-DD>.md` with the template above, including the `Diffusion` section listing files actually changed.

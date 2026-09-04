@@ -41,3 +41,4 @@ Add one row per critical domain that has a capsule. Don't pre-create rows for ca
 - For a small UI task, the project's UI doctrine (if any capsule exists) prevails over generic frontend habits.
 - For a critical-zone change, load the pattern (at L) before editing.
 - Never load more than **3 capsules simultaneously** for a single task. If it feels like more, the task is over-scoped — split it.
+- A `description:` (workflow, rule, skill) states **when** to invoke the file, never **what it does**: an agent that reads a summary of the procedure follows the summary instead of opening the file.
