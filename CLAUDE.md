@@ -2,9 +2,13 @@
 
 > Claude Code is the primary agent for this repo. Codex CLI also operates here and reads `AGENTS.md` natively — no Codex-specific adapter is needed.
 
+@AGENTS.md
+
+> The import above loads `AGENTS.md` mechanically on every session (path relative to this file). Keep the prose load order below: it is the fallback when the import is not expanded, e.g. Claude Code started from a subdirectory.
+
 ## Doctrine
 
-The 5 Karpathy rules (+ the M0 verification mechanism) and all project doctrine live in **`AGENTS.md`** — read it first, every session. Never duplicate them here.
+The 5 Karpathy rules (+ the M0 verification mechanism) and all project doctrine live in **`AGENTS.md`**, imported above. Never duplicate them here.
 
 ## Role of this file
 

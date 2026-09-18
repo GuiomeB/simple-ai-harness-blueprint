@@ -8,7 +8,7 @@ The base table lives in `SKILL.md §Health metrics`. This document expands it wi
 
 ## How to use this document
 
-Run a quarterly review:
+Run a quarterly review, or earlier when symptom 11 fires:
 
 1. Pick a quiet hour. Open the repo at `main`.
 2. Walk through the symptoms below in order. For each, run the *detection* check.
@@ -125,6 +125,16 @@ Two or more active symptoms simultaneously → schedule a dedicated harness-rewo
 
 ---
 
+### 11. The harness was edited heavily since the last review
+
+**Detect:** `git log --oneline --since="<date of last harness-review>" -- AGENTS.md .agents/ | wc -l`. Ten or more commits → the review is due now, whatever the calendar says. Drift accrues per edit, not per week: a hot fortnight can turn `AGENTS.md` over faster than a quarter of quiet maintenance.
+
+**First fix:** run the quarterly review template below immediately, scoped to the files those commits touched.
+
+**Second fix:** if this symptom fires every month, the harness is absorbing doctrine that belongs elsewhere (a capsule, a rule, an ADR). Extract, then re-check the size budgets with the validator.
+
+---
+
 ## Anti-patterns to avoid when "fixing" symptoms
 
 - **Disabling the validator** because it warns on a known issue. The right move is to fix the issue or document the exception, never to silence the tool.
@@ -150,6 +160,7 @@ Copy this into a `/learn refactor harness-review-<YYYY-MM-DD>` and complete it:
 - [ ] 8. Patterns INDEX drift
 - [ ] 9. Wrong rails on PRs
 - [ ] 10. Validator noise
+- [ ] 11. Edit volume since last review
 
 ## Active symptoms
 <list>

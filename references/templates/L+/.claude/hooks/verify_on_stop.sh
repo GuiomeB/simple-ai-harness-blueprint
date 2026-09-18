@@ -12,7 +12,9 @@ if ! git status --porcelain -- \
   exit 0
 fi
 
-if ! python3 scripts/validate_agent_context.py >/dev/null 2>&1; then
+# Exit 1 = warnings only (informational, never blocks). Exit 2 = errors → block.
+python3 scripts/validate_agent_context.py >/dev/null 2>&1 && rc=0 || rc=$?
+if [ "$rc" -ge 2 ]; then
   echo "validator errors — fix before ending turn" >&2
   exit 2
 fi

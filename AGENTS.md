@@ -35,7 +35,7 @@ The validation matrix, the Definition of Done (`WORKFLOW.md`), `/tdd-loop`, and 
 
 ## Role of this file
 
-- `AGENTS.md` is the canonical contract for all agents. Codex CLI reads it natively; Claude Code reads it via `CLAUDE.md` adapter.
+- `AGENTS.md` is the canonical contract for all agents. Codex CLI and Cursor read it natively; Claude Code loads it through the `@AGENTS.md` import at the top of `CLAUDE.md`.
 - Domain-specific doctrine lives in `.agents/context/*.md` capsules — load only what the ROUTER points to.
 - `.agents/patterns/*.md` carries short, copyable procedures keyed to pivot files in the codebase.
 - `.agents/rules/*.md` carries narrow technical conventions (test signatures, smoke script contracts, etc.).
@@ -109,6 +109,26 @@ Every PR declares a rail in its body — see `.github/pull_request_template.md`.
 - **Rail: green | amber | red**
 
 Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-rail-guard.yml`, script `scripts/check_pr_rail_consistency.py`) fails any PR declared `green` that touches a path listed in `.github/CODEOWNERS`. Reclassify to `amber` or `red` and re-push. No `--no-verify`-style escapes.
+
+## Invariants and enforcement (RFC 2119 vocabulary)
+
+**MUST / NEVER** mark invariants: rules whose drift breaks the harness. **SHOULD / PREFER** mark judgement calls an agent may override with a stated reason. The 5 rules above are posture, not invariants; they stay prose on purpose.
+
+Every invariant names the mechanism that enforces it, or is declared `unenforced`. Verifiability beats wording: an invariant that keeps drifting gets a hook, a deny rule, or a CI gate, never stronger adjectives. The meta-validator checks that every path in this table exists and that no row is left blank.
+
+| Invariant | Enforced by |
+|---|---|
+| NEVER push to `main` without human approval | `.claude/hooks/gate_git_push.sh` (PreToolUse defer) |
+| NEVER force-push, `rm -rf`, or commit with `--no-verify` | `.claude/settings.json` deny list |
+| NEVER read `.env*`, `*.pem`, `id_rsa*` | `.claude/settings.json` deny list; doctrine in `.agents/rules/sensitive-data.md` |
+| A `green` rail MUST NOT touch a `.github/CODEOWNERS` path | `.github/workflows/pr-rail-guard.yml` (blocking CI) |
+| Harness edits MUST pass the meta-validator before the turn ends | `.claude/hooks/verify_on_stop.sh` (Stop hook; errors block, warnings pass, see `docs/adr/ADR-0004-stop-gate-blocks-on-errors-only.md`) |
+| Patterns MUST be registered in `.agents/patterns/INDEX.md`; internal links MUST resolve; files MUST stay within their size budget | `scripts/validate_agent_context.py` |
+| A `/loop` MUST carry its three hard brakes | unenforced; doctrine in `.agents/workflows/loop.md`, verified by the `harness-reviewer` subagent |
+| NEVER load more than 3 capsules + patterns at once | unenforced |
+| NEVER put doctrine in `.claude/`; NEVER put Claude runtime in `.agents/` | unenforced |
+
+An `unenforced` row is a backlog item, not a failure: it says where the next hook or gate should go.
 
 ## Learning loop
 

@@ -55,6 +55,7 @@ Lands in: <target artefact — e.g. AGENTS.md, WORKFLOW.md, an existing capsule,
 1. **One action only.** Not two, not three. If multiple actions feel necessary, pick the one that most reduces recurrence. Save the others for next time.
 2. **The action must land somewhere executable.** Updating `AGENTS.md` counts. Updating a `.agents/context/*.md` capsule counts. Writing a new pattern (at L) counts. A `LEARN_*.md` file alone does not count — it's only the audit trail.
 3. **The output file is ≤ 40 lines.**
+4. **Refine before adding.** Read the neighbouring lines of the target artefact first and prefer the smallest edit of an existing line over a new one. A new line needs a reason the existing ones cannot absorb: instruction files bloat one justified sentence at a time.
 
 ## Steps
 
