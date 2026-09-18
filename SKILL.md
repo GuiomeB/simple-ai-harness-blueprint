@@ -157,6 +157,8 @@ Promotion to L+ is gated (see §Pick the size → L+). `.claude/logs/` is gitign
 | `.claude/agents/*.md` | 30–60 | 120 |
 | `.claude/hooks/*.sh` (L+) | ≤ 40 | 80 |
 
+At L the meta-validator enforces this table: soft target exceeded is a warning, hard ceiling exceeded is an error.
+
 **Session-init budget:** keep total auto-loaded context ≤ **6 500 lines** across all files an agent reads before its first action. Trade per-doc ceilings against this total — a leaner `ROUTER.md` leaves room for a fatter `WORKFLOW.md`, and vice versa.
 
 **MCP / tool-schema budget:** every connected MCP server spends context tokens on every turn (≈ 10–20k tokens for 50 tools without lazy loading). Cap a serious setup at **≤ 5 servers**; prefer a code-graph/memory server, a Git server, a filesystem server, a web-search server, and a docs server. Fewer servers beats lazy-loading. Subagents with a narrow `tools:` allowlist keep the main loop's schema cost down.
@@ -265,7 +267,11 @@ P1/P2 finding during review → automatic red until resolved.
 **At L — machine enforcement**:
 
 - CI job `pr-rail-guard`: fail PRs declared `green` that touch any path listed in `.github/CODEOWNERS`
-- Meta-validator `scripts/validate_agent_context.*`: check every `npm run X` cited in `AGENTS.md` exists in `package.json`, every internal link in `.agents/**` resolves, and `patterns/INDEX.md` covers every pattern file
+- Meta-validator `scripts/validate_agent_context.*`: check every `npm run X` cited in `AGENTS.md` exists in `package.json`, every internal link in `.agents/**` resolves, `patterns/INDEX.md` covers every pattern file, every file stays within its size budget (§File size budgets), and every row of `AGENTS.md §Invariants` names an existing enforcement path or is marked `unenforced`
+
+### Invariants and enforcement (L and above, lives in `AGENTS.md`)
+
+RFC 2119 vocabulary: **MUST / NEVER** mark invariants, **SHOULD / PREFER** mark judgement calls. The 5 rules stay prose (posture, not invariants). Every invariant sits in a two-column table, `Invariant | Enforced by`, and names the hook, deny rule, or CI job that enforces it, or is declared `unenforced`. Verifiability beats wording: a drifting invariant earns a gate, not stronger adjectives. The L / L+ `AGENTS.md` templates ship the table pre-filled with the blueprint's own gates; the meta-validator checks that every cited path exists.
 
 ## Codex Desktop compatibility
 
@@ -322,6 +328,7 @@ When the bootstrap is done, the report from step 5 of the workflow must enumerat
 | `.agents/` files contradict | No validator | Add `validate_agent_context.*`; schedule a `/retro` |
 | Token-heavy loads for trivial tasks | ROUTER too permissive | Tighten rules; mark files "do not load by default" |
 | Capsule untouched 3+ months | Doctrine stable or zone dead | Inline into `AGENTS.md` or delete with an ADR |
+| 10+ commits on `AGENTS.md` / `.agents/**` since the last harness review | Drift accrues per edit, not per calendar quarter | Run the review now (`references/health-metrics.md §11`) |
 | New agent ignores rules | Reads a different config file | Symlink or copy `AGENTS.md` to its expected name |
 
 Two or more symptoms simultaneously → schedule rework.

@@ -15,6 +15,10 @@ Checks (in order):
   6. Every `npm run X` or `python scripts/X.py` cited in AGENTS.md / WORKFLOW.md
      points to something callable (best-effort: checks package.json scripts
      and file existence; skips silently if neither resource is available).
+  7. Every harness file stays within its line budget (SKILL.md §File size
+     budgets): soft target exceeded → warning, hard ceiling exceeded → error.
+  8. Every row of `AGENTS.md §Invariants and enforcement` names an existing
+     enforcement path or is marked `unenforced`.
 
 Exit code:
   0 — all checks pass
@@ -42,6 +46,20 @@ PY_CMD = re.compile(r"`python (scripts/[\w/\-.]+\.py)`")
 HARD_MODEL = re.compile(
     r"\b(opus|sonnet|haiku|gpt-\d|gemini-\d|o[13]-)\b", re.IGNORECASE
 )
+# Line budgets (glob, soft target, hard ceiling) — mirror of SKILL.md §File
+# size budgets. Kept inline so the validator stays a single copyable file.
+BUDGETS: list[tuple[str, int, int]] = [
+    ("AGENTS.md", 150, 300),
+    ("CLAUDE.md", 60, 100),
+    ("WORKFLOW.md", 200, 300),
+    (".agents/ROUTER.md", 60, 100),
+    (".agents/context/*.md", 150, 200),
+    (".agents/patterns/*.md", 120, 200),
+    (".agents/workflows/*.md", 200, 300),
+    (".agents/skills/*/SKILL.md", 200, 500),
+    (".claude/agents/*.md", 60, 120),
+    (".claude/hooks/*.sh", 40, 80),
+]
 
 
 def read_text(path: Path) -> str:
@@ -235,6 +253,44 @@ def check_commands() -> None:
                 )
 
 
+def check_file_budgets() -> None:
+    """Soft target exceeded → warning; hard ceiling exceeded → error."""
+    for pattern, soft, hard in BUDGETS:
+        for path in sorted(ROOT.glob(pattern)):
+            lines = len(read_text(path).splitlines())
+            rel = path.relative_to(ROOT)
+            if lines > hard:
+                errors.append(f"{rel} is {lines} lines (hard ceiling {hard})")
+            elif lines > soft:
+                warnings.append(f"{rel} is {lines} lines (soft target {soft})")
+
+
+def check_invariants_table() -> None:
+    """Each `AGENTS.md §Invariants` row cites an existing path or `unenforced`."""
+    text = read_text(ROOT / "AGENTS.md")
+    section = re.search(r"^## Invariants.*?(?=^## |\Z)", text, re.M | re.S)
+    if not section:
+        return
+    for line in section.group(0).splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 2 or cells[0] in ("", "Invariant") or set(cells[0]) <= {"-"}:
+            continue
+        enforcement = cells[1]
+        if "<" in enforcement:  # template placeholder — skip
+            continue
+        paths = INLINE_PATH.findall(enforcement)
+        if "unenforced" not in enforcement and not paths:
+            errors.append(
+                f"AGENTS.md invariant `{cells[0][:50]}` names no enforcement "
+                f"path and is not marked `unenforced`"
+            )
+        for ref in paths:
+            if "<" not in ref and not (ROOT / ref).exists():
+                errors.append(
+                    f"AGENTS.md invariant cites `{ref}` which does not exist"
+                )
+
+
 def collect_doc_files() -> list[Path]:
     """All .md files this validator should sanity-check for links."""
     roots = [
@@ -260,6 +316,8 @@ def main() -> int:
     check_claude_artifacts()
     check_hardcoded_models()
     check_commands()
+    check_file_budgets()
+    check_invariants_table()
 
     for w in warnings:
         print(f"WARN  {w}")

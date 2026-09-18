@@ -2,9 +2,13 @@
 
 > Include this file **only if Claude (Claude Code or Claude.ai) is one of the agents working on this repo**. Otherwise delete it — `AGENTS.md` already carries everything universal.
 
+@AGENTS.md
+
+> The import above loads `AGENTS.md` mechanically on every session (path relative to this file). Keep the prose load order below: it is the fallback when the import is not expanded, e.g. Claude Code started from a subdirectory.
+
 ## Doctrine
 
-The 5 Karpathy rules (+ the M0 verification mechanism) and all project doctrine live in **`AGENTS.md`** — read it first, every session. Never duplicate them here.
+The 5 Karpathy rules (+ the M0 verification mechanism) and all project doctrine live in **`AGENTS.md`**, imported above. Never duplicate them here.
 
 ## Role of this file
 

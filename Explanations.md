@@ -96,6 +96,14 @@ This is the mechanism I'd save first if I had to keep only one from this bluepri
 
 ---
 
+## Invariants — verifiability over grammar
+
+Every few months a post argues that agents ignore rules written in prose and would obey a compressed pseudo-code grammar (`ON event => IF cond => ACTION`, RFC 2119 verbs, token gates). The measured part of those threads is narrower and more useful: rules that name an exact path and an exact command get followed; rules built on adverbs ("always carefully check…") get ignored, in prose and in pseudo-code alike. A forgotten typecheck is an enforcement problem, not a phrasing problem, and a hook catches it every time where no wording reliably does.
+
+So the blueprint does not adopt a DSL. It adopts a vocabulary and a contract. **MUST / NEVER** mark invariants, **SHOULD / PREFER** mark judgement calls, and every invariant in `AGENTS.md §Invariants` names the hook, deny rule, or CI job that enforces it, or is declared `unenforced`. The validator checks that the cited paths exist. An `unenforced` row is not a failure; it is the backlog of the next gate to write. The 5 rules stay prose on purpose: they are posture, and hardening judgement calls into deterministic clauses is exactly what makes them misfire.
+
+---
+
 ## What was tried and abandoned
 
 For honesty, here are ideas that seemed promising and turned out to underperform:

@@ -35,7 +35,7 @@ The validation matrix, the Definition of Done (`WORKFLOW.md`), `/tdd-loop`, and 
 
 ## Role of this file
 
-- `AGENTS.md` is the canonical contract for all agents.
+- `AGENTS.md` is the canonical contract for all agents. Codex CLI and Cursor read it natively; Claude Code loads it through the `@AGENTS.md` import at the top of `CLAUDE.md`.
 - Domain-specific doctrine lives in `.agents/context/*.md` capsules — load only what the ROUTER points to.
 - `.agents/patterns/*.md` carries short, copyable procedures keyed to pivot files in the codebase.
 - `.agents/rules/*.md` carries narrow technical conventions (test signatures, smoke script contracts, etc.).
@@ -104,6 +104,22 @@ Every PR declares a rail in its body — see `.github/pull_request_template.md`.
 - **Rail: green | amber | red**
 
 Machine enforcement: the CI job `pr-rail-guard` (workflow `.github/workflows/pr-rail-guard.yml`, script `scripts/check_pr_rail_consistency.py`) fails any PR declared `green` that touches a path listed in `.github/CODEOWNERS`. Reclassify to `amber` or `red` and re-push. No `--no-verify`-style escapes.
+
+## Invariants and enforcement (RFC 2119 vocabulary)
+
+**MUST / NEVER** mark invariants: rules whose drift breaks the harness. **SHOULD / PREFER** mark judgement calls an agent may override with a stated reason. The 5 rules above are posture, not invariants; they stay prose on purpose.
+
+Every invariant names the mechanism that enforces it, or is declared `unenforced`. Verifiability beats wording: an invariant that keeps drifting gets a hook, a deny rule, or a CI gate, never stronger adjectives. The meta-validator checks that every path in this table exists and that no row is left blank.
+
+| Invariant | Enforced by |
+|---|---|
+| A `green` rail MUST NOT touch a `.github/CODEOWNERS` path | `.github/workflows/pr-rail-guard.yml` (blocking CI) |
+| Patterns MUST be registered in `.agents/patterns/INDEX.md`; internal links MUST resolve; files MUST stay within their size budget | `scripts/validate_agent_context.py` |
+| NEVER load more than 3 capsules + patterns at once | unenforced |
+| NEVER put doctrine in `.claude/`; NEVER put Claude runtime in `.agents/` | unenforced |
+| <project invariant, e.g. NEVER edit `<generated-dir>/**` by hand> | <path to the hook / CI job, or `unenforced`> |
+
+An `unenforced` row is a backlog item, not a failure: it says where the next hook or gate should go.
 
 ## Learning loop
 

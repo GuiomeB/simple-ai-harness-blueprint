@@ -1,6 +1,6 @@
 # simple-ai-harness-blueprint — STATUS APP (Source of Truth)
 
-Date: 2026-07-08
+Date: 2026-09-18
 Branch of reference: `main`
 Last production deploy: n/a — template/skill repo; "production" = published on GitHub (`GuiomeB/simple-ai-harness-blueprint`, MIT).
 Recent scope: L+ hardening (ADR-0003 loop spec/state, deterministic permissions, tiered-model pattern) ; first dogfood loop `fleet-audit`.
@@ -46,6 +46,7 @@ Doctrine release in flight. Follow `WORKFLOW.md §8`:
 
 ## 4. Recent decisions
 
+- 2026-09-18 — Invariants and enforcement convention (RFC 2119 vocabulary; every MUST/NEVER names its gate or is `unenforced`); validator now checks size budgets and the invariants table; `@AGENTS.md` import in `CLAUDE.md`; refine-before-adding constraint in `/learn`; edit-volume trigger for harness reviews. ADR-0004: Stop gate blocks on validator errors only.
 - 2026-07-08 — ADR-0003: mandatory SPEC/STATE for `/loop`; dogfood via manual `fleet-audit` loop (6 repos without doctrine stamp, 1 on v4 flagged).
 - 2026-07-04 — Add doctrine version stamp, fleet audit script, release checklist (WORKFLOW §8).
 - 2026-06-24 — Doctrine v5 + L+ autonomy profile (ADR-0002).
@@ -53,6 +54,8 @@ Doctrine release in flight. Follow `WORKFLOW.md §8`:
 
 ## 5. Known debt / signals to watch
 
+- `AGENTS.md` sits above its 150-line soft target (validator warns). Extraction candidate: §Execution primitives + §Autonomy profile into a capsule.
+- Three invariants are `unenforced` (loop brakes, 3-capsule load cap, doctrine/runtime split) — backlog for the next hook or check.
 - Fleet lag: see `docs/loops/fleet-audit/STATE.md §Needs Human Review`.
 - The claude.ai uploaded skill copy does not track this repo — re-upload after doctrine release.
 - `.github/CODEOWNERS` owners remain placeholder `@<owner>` strings.
@@ -64,5 +67,5 @@ Doctrine release in flight. Follow `WORKFLOW.md §8`:
 - `AGENTS.md` (universal agent contract — stamped v5)
 - `CLAUDE.md` (Claude adapter)
 - `scripts/audit_fleet.py` (fleet-wide doctrine audit)
-- `docs/adr/` (ADR-0001, ADR-0002, ADR-0003)
+- `docs/adr/` (ADR-0001, ADR-0002, ADR-0003, ADR-0004)
 - `docs/loops/fleet-audit/` (first L+ dogfood loop)
