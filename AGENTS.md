@@ -1,6 +1,6 @@
 # simple-ai-harness-blueprint — Agent Contract
 
-> Doctrine: v5 (5 règles Karpathy + M0) — appliquée 2026-06-24
+> Doctrine: v5.1 (5 règles Karpathy + M0) — appliquée 2026-11-01
 
 ## Doctrine — the 5 Karpathy rules
 
@@ -12,8 +12,8 @@ Before any action on this repo, **every agent** (Claude Code, Codex CLI, Cursor,
 2. **Simplest solution for simple problems, stronger solutions for hard ones.**
    Match the solution to the difficulty. Don't over-engineer or add flexibility that isn't needed yet. No preventive abstractions.
 
-3. **Don't touch unrelated code — but surface what you find.**
-   Diff = scope of the ticket. No opportunistic edits. When you spot bad code or a design smell, raise it with the user as a *separate* issue instead of fixing it inline.
+3. **Fix the root cause, touch nothing unrelated — and surface what you find.**
+   Scope is the root cause, not the line you were pointed at. Before fixing, grep for every place the same defect lives (callers, siblings, tests) and fix it **once, where it originates** — usually the shared function. Patching one call site and leaving its twins broken is half-done, not surgical. If the root-cause fix changes behaviour for other callers, list them in the PR. Beyond that cause: no opportunistic reformatting, no collateral renames, no "improvements on the side". Smells unrelated to the cause go to a *separate* issue. Clean orphans *your* changes created.
 
 4. **Flag uncertainty explicitly.**
    If you're unsure, see rule 1. When it makes sense, run a small, localised, low-risk experiment and bring the hypothesis and results back to discuss. Confidence without certainty does more damage than admitting a gap.

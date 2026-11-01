@@ -1,6 +1,6 @@
 # <Project Name> — Agent Contract
 
-> Doctrine: v5 (5 règles Karpathy + M0) — appliquée <YYYY-MM-DD>
+> Doctrine: v5.1 (5 règles Karpathy + M0) — appliquée <YYYY-MM-DD>
 
 ## Doctrine — the 5 Karpathy rules
 
@@ -12,8 +12,8 @@ Before any action on this repo, **every agent** (Claude, Codex CLI, Cursor, Anti
 2. **Simplest solution for simple problems, stronger solutions for hard ones.**
    Match the solution to the difficulty. Don't over-engineer or add flexibility that isn't needed yet. No preventive abstractions. No Strategy pattern for five lines of arithmetic.
 
-3. **Don't touch unrelated code — but surface what you find.**
-   Diff = scope of the ticket. No opportunistic reformatting, no collateral renames, no "improvements on the side". When you spot bad code or a design smell, raise it with the user as a *separate* issue instead of fixing it inline. Clean orphans *your* changes created.
+3. **Fix the root cause, touch nothing unrelated — and surface what you find.**
+   Scope is the root cause, not the line you were pointed at. Before fixing, grep for every place the same defect lives (callers, siblings, tests) and fix it **once, where it originates** — usually the shared function. Patching one call site and leaving its twins broken is half-done, not surgical. If the root-cause fix changes behaviour for other callers, list them in the PR. Beyond that cause: no opportunistic reformatting, no collateral renames, no "improvements on the side". Smells unrelated to the cause go to a *separate* issue. Clean orphans *your* changes created.
 
 4. **Flag uncertainty explicitly.**
    If you're unsure, see rule 1. When it makes sense, run a small, localised, low-risk experiment and bring the hypothesis and results back to discuss. Confidence without certainty does more damage than admitting a gap.
