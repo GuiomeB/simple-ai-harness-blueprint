@@ -36,7 +36,7 @@ Rules:
 
 - [ ] Rule 1 — no silent assumptions; ambiguities surfaced before coding (autonomous-mode assumptions recorded)
 - [ ] Rule 2 — solution matched to difficulty; no speculative abstractions
-- [ ] Rule 3 — diff within declared scope; smells surfaced as separate issues, not fixed inline
+- [ ] Rule 3 — root cause fixed once at its origin (all call sites checked, affected callers listed); nothing unrelated touched; smells surfaced as separate issues
 - [ ] Rule 4 — uncertainty flagged explicitly
 - [ ] Rule 5 — a better / longer-lasting approach considered and proposed where relevant
 - [ ] M0 — success criterion defined before acting and is now verified

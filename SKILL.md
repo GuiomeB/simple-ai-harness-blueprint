@@ -18,14 +18,14 @@ Every `AGENTS.md` generated opens with these. They override convenience and othe
 **Version stamp.** Every generated `AGENTS.md` carries, right under its title, the line:
 
 ```markdown
-> Doctrine: v5 (5 règles Karpathy + M0) — appliquée <YYYY-MM-DD>
+> Doctrine: v5.1 (5 règles Karpathy + M0) — appliquée <YYYY-MM-DD>
 ```
 
 Fill the date with the day the doctrine was applied to that repo. The stamp is what makes doctrine drift greppable across a fleet (`scripts/audit_fleet.py` reads it). A repo deliberately left on an older doctrine states it the same way (e.g. `> Doctrine: v4 figée — …`) — a known lag is fine, an invisible one is not.
 
 1. **Ask, don't assume.** Ambiguity → ask before coding. Only in an explicitly activated autonomous mode (L+): pick the most reasonable interpretation, proceed, record the assumption.
 2. **Simplest solution for simple problems, stronger for hard ones.** No over-engineering, no preventive abstractions.
-3. **Don't touch unrelated code — but surface what you find.** Diff = scope of the ticket; raise smells as a separate issue.
+3. **Fix the root cause, touch nothing unrelated — and surface what you find.** Scope = the root cause: grep every caller, fix once at the origin; raise unrelated smells as a separate issue.
 4. **Flag uncertainty explicitly.** Unsure → see rule 1; a small low-risk experiment + results beats false confidence.
 5. **Suggest better ways.** Propose lasting improvements over tactical fixes.
 

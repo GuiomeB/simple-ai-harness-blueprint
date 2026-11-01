@@ -11,7 +11,7 @@ Next milestone: merge L+ hardening PR stack; tag `doctrine-v5`; fleet lag resolu
 ## 1. Snapshot
 
 - Runtime: n/a — documentation + templates + Python scripts (validator, fleet audit, rail guard).
-- Critical zones state: harness contract stable in v5; L+ profile extended (ADR-0003).
+- Critical zones state: harness contract stable in v5.1 (rule 3 widened to the root cause); L+ profile extended (ADR-0003).
 - Active feature flags: none.
 - Open architectural questions: none blocking. Distribution of the claude.ai skill copy is manual (re-upload after each doctrine release — see WORKFLOW §8).
 
@@ -64,7 +64,7 @@ Doctrine release in flight. Follow `WORKFLOW.md §8`:
 ## 6. Active references
 
 - `WORKFLOW.md` (process, branches, CI, doctrine release checklist §8)
-- `AGENTS.md` (universal agent contract — stamped v5)
+- `AGENTS.md` (universal agent contract — stamped v5.1)
 - `CLAUDE.md` (Claude adapter)
 - `scripts/audit_fleet.py` (fleet-wide doctrine audit)
 - `docs/adr/` (ADR-0001, ADR-0002, ADR-0003, ADR-0004)

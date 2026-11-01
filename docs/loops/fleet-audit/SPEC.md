@@ -2,7 +2,7 @@
 
 ## Goal
 
-Each harnessed repo under `~/Dev` is on doctrine v5 or explicitly frozen; no silent lag.
+Each harnessed repo under `~/Dev` is on doctrine v5.1 or explicitly frozen; no silent lag.
 
 ## Done when
 
