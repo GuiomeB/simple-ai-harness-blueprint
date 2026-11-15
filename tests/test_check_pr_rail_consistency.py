@@ -29,11 +29,17 @@ UNRESOLVABLE_SHA = "0" * 40
 
 
 def _git_env() -> dict[str, str]:
-    """Environment isolated from the developer's git config and from CI vars."""
+    """Environment isolated from the developer's git config and from CI vars.
+
+    Every inherited GIT_* variable is dropped: a git hook running the suite
+    sets GIT_DIR / GIT_INDEX_FILE, which would point the temp-repo commands
+    at the developer's real repository.
+    """
     env = {
         key: value
         for key, value in os.environ.items()
-        if key not in {"PR_BODY", "BASE_SHA", "HEAD_SHA"}
+        if not key.startswith("GIT_")
+        and key not in {"PR_BODY", "BASE_SHA", "HEAD_SHA"}
     }
     env.update(
         GIT_CONFIG_GLOBAL=os.devnull,
@@ -116,6 +122,7 @@ class GitDiffFailureTests(RailGuardTestCase):
         self.assertIn("cannot compute diff", result.stderr)
         # git's own message is forwarded, not swallowed.
         self.assertIn("fatal:", result.stderr)
+        self.assertNotIn("OK:", result.stdout)
 
     def test_git_not_on_path_exits_2(self) -> None:
         head = self._change("docs/note.md")

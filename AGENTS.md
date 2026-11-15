@@ -71,7 +71,7 @@ python3 -m unittest discover -s tests -v    # unit tests (stdlib, no dependency)
 python3 scripts/validate_agent_context.py    # meta-validator (this harness)
 ```
 
-Replace each `<placeholder>` once the corresponding tool is wired in. Until then, only the validator is operational.
+Replace each `<placeholder>` once the corresponding tool is wired in. Until then, only the validator and the unit tests are operational.
 
 ## Critical zones
 
