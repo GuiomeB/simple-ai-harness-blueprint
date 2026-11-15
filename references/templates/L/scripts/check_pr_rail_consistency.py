@@ -17,7 +17,7 @@ Inputs (in order of preference):
 Exit codes:
   0 — pass
   1 — rail missing or mismatched (rejected PR)
-  2 — internal error (missing CODEOWNERS, etc.)
+  2 — internal error (missing CODEOWNERS, failed `git diff`, etc.)
 """
 
 from __future__ import annotations
@@ -94,7 +94,13 @@ def matches_codeowner(path: str, patterns: list[str]) -> str | None:
     return None
 
 
-def get_changed_files(args: argparse.Namespace) -> list[str]:
+def get_changed_files(args: argparse.Namespace) -> list[str] | None:
+    """Return the changed paths, or None when the diff could not be computed.
+
+    None is distinct from an empty list on purpose: a failed `git diff` also
+    prints nothing, and treating it as "no changes" would let the guard pass
+    a PR it never inspected (fail-open).
+    """
     if args.changed_files:
         return [
             line.strip()
@@ -109,10 +115,18 @@ def get_changed_files(args: argparse.Namespace) -> list[str]:
         cmd = ["git", "diff", "--name-only", "origin/main...HEAD"]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-        return [line for line in result.stdout.splitlines() if line.strip()]
     except FileNotFoundError:
         print("ERROR: `git` not available; cannot compute diff.", file=sys.stderr)
-        return []
+        return None
+    if result.returncode != 0:
+        print(
+            f"ERROR: `{' '.join(cmd)}` failed (exit {result.returncode}); "
+            "cannot compute diff.",
+            file=sys.stderr,
+        )
+        print(result.stderr.strip(), file=sys.stderr)
+        return None
+    return [line for line in result.stdout.splitlines() if line.strip()]
 
 
 def get_pr_body(args: argparse.Namespace) -> str:
@@ -148,6 +162,8 @@ def main() -> int:
     rail = rail_match.group(1).lower()
 
     changed = get_changed_files(args)
+    if changed is None:
+        return 2
     if not changed:
         print("INFO: no changed files detected; rail-guard skipping.")
         return 0
