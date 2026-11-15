@@ -27,6 +27,7 @@ WORKFLOW.md                                     @<owner>
 .agents/                                        @<owner>
 .claude/                                         @<owner>     # Claude Code runtime: subagents, and at L+ hooks/settings
 scripts/                                        @<owner>
+tests/                                          @<owner>     # tests guarding the scripts above (weakening one must not pass as green)
 agents/                                         @<owner>     # Codex Desktop / external-tool install metadata (if shipped)
 
 # Project-specific critical zones — REPLACE these with your real paths:
