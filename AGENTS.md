@@ -64,7 +64,7 @@ Open-source template repo (`simple-ai-harness-blueprint`) providing a copyable A
 <run dev>                 # local dev server (n/a at bootstrap stage)
 <typecheck>               # type checker (n/a at bootstrap stage)
 <lint>                    # linter (n/a at bootstrap stage)
-<test>                    # unit tests (n/a at bootstrap stage)
+python3 -m unittest discover -s tests -v    # unit tests (stdlib, no dependency)
 <format>                  # formatter — run before every commit (n/a at bootstrap stage)
 <build>                   # production build (n/a at bootstrap stage)
 <smoke>                   # smoke / integration check (n/a at bootstrap stage)
@@ -122,6 +122,7 @@ Every invariant names the mechanism that enforces it, or is declared `unenforced
 | NEVER force-push, `rm -rf`, or commit with `--no-verify` | `.claude/settings.json` deny list |
 | NEVER read `.env*`, `*.pem`, `id_rsa*` | `.claude/settings.json` deny list; doctrine in `.agents/rules/sensitive-data.md` |
 | A `green` rail MUST NOT touch a `.github/CODEOWNERS` path | `.github/workflows/pr-rail-guard.yml` (blocking CI) |
+| The template copies of `scripts/check_pr_rail_consistency.py` MUST stay byte-identical to the root copy | `.github/workflows/tests.yml` (blocking CI) |
 | Harness edits MUST pass the meta-validator before the turn ends | `.claude/hooks/verify_on_stop.sh` (Stop hook; errors block, warnings pass, see `docs/adr/ADR-0004-stop-gate-blocks-on-errors-only.md`) |
 | Patterns MUST be registered in `.agents/patterns/INDEX.md`; internal links MUST resolve; files MUST stay within their size budget | `scripts/validate_agent_context.py` |
 | A `/loop` MUST carry its three hard brakes | unenforced; doctrine in `.agents/workflows/loop.md`, verified by the `harness-reviewer` subagent |
