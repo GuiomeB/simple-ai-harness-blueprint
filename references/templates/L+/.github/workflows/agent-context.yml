@@ -43,4 +43,14 @@ jobs:
           python-version: '3.11'
 
       - name: Run validator
-        run: python3 scripts/validate_agent_context.py
+        run: |
+          if python3 scripts/validate_agent_context.py; then
+            exit 0
+          else
+            status=$?
+            if [ "$status" -eq 1 ]; then
+              echo "::warning::Validator reported warnings; see output above."
+              exit 0
+            fi
+            exit "$status"
+          fi

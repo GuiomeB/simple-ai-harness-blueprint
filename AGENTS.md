@@ -64,14 +64,14 @@ Open-source template repo (`simple-ai-harness-blueprint`) providing a copyable A
 <run dev>                 # local dev server (n/a at bootstrap stage)
 <typecheck>               # type checker (n/a at bootstrap stage)
 <lint>                    # linter (n/a at bootstrap stage)
-<test>                    # unit tests (n/a at bootstrap stage)
+python3 -m unittest discover -s tests -v    # unit tests (stdlib, no dependency)
 <format>                  # formatter — run before every commit (n/a at bootstrap stage)
 <build>                   # production build (n/a at bootstrap stage)
 <smoke>                   # smoke / integration check (n/a at bootstrap stage)
 python3 scripts/validate_agent_context.py    # meta-validator (this harness)
 ```
 
-Replace each `<placeholder>` once the corresponding tool is wired in. Until then, only the validator is operational.
+Replace each `<placeholder>` once the corresponding tool is wired in. Until then, only the validator and the unit tests are operational.
 
 ## Critical zones
 
@@ -81,7 +81,7 @@ Files where mistakes are expensive. At bootstrap stage the only critical zones a
 |---|---|---|---|
 | `AGENTS.md`, `.agents/**`, `WORKFLOW.md` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
 | `scripts/validate_agent_context.py`, `scripts/audit_fleet.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
-| `.github/workflows/pr-rail-guard.yml`, `scripts/check_pr_rail_consistency.py` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
+| `.github/workflows/pr-rail-guard.yml`, `scripts/check_pr_rail_consistency.py`, `tests/` | (no capsule — meta) | `.agents/patterns/change-critical-zone.md` | — |
 | `<path/to/future-critical-file>` | `.agents/context/<domain>.md` | `.agents/patterns/change-critical-zone.md` | `<project-skill>` if any |
 
 The full list of critical paths for CI gating lives in `.github/CODEOWNERS`.
@@ -122,6 +122,7 @@ Every invariant names the mechanism that enforces it, or is declared `unenforced
 | NEVER force-push, `rm -rf`, or commit with `--no-verify` | `.claude/settings.json` deny list |
 | NEVER read `.env*`, `*.pem`, `id_rsa*` | `.claude/settings.json` deny list; doctrine in `.agents/rules/sensitive-data.md` |
 | A `green` rail MUST NOT touch a `.github/CODEOWNERS` path | `.github/workflows/pr-rail-guard.yml` (blocking CI) |
+| The template copies of `scripts/check_pr_rail_consistency.py` MUST stay byte-identical to the root copy | `.github/workflows/tests.yml` (blocking CI) |
 | Harness edits MUST pass the meta-validator before the turn ends | `.claude/hooks/verify_on_stop.sh` (Stop hook; errors block, warnings pass, see `docs/adr/ADR-0004-stop-gate-blocks-on-errors-only.md`) |
 | Patterns MUST be registered in `.agents/patterns/INDEX.md`; internal links MUST resolve; files MUST stay within their size budget | `scripts/validate_agent_context.py` |
 | A `/loop` MUST carry its three hard brakes | unenforced; doctrine in `.agents/workflows/loop.md`, verified by the `harness-reviewer` subagent |
